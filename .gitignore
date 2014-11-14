@@ -24,6 +24,6 @@ local.properties
 proguard/
 #Netbeans
 nbandroid/
-
+private/
 # Log Files
 *.log
