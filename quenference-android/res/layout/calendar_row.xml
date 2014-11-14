@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="fill_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal"
+              android:padding="15dp">
+    <LinearLayout
+            android:id="@+id/calendar_linearLayoutLeft"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dip"
+            android:orientation="vertical" android:gravity="left"
+            android:layout_alignParentLeft="true"
+
+            android:layout_width="160dp">
+
+        <TextView
+                android:id="@+id/dtstart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:textSize="10sp" android:text="18:00"/>
+
+        <TextView
+                android:id="@+id/dtend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:textSize="10sp" android:text="22:00"/>
+
+    </LinearLayout>
+    <LinearLayout android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+                  android:layout_alignParentRight="true"
+                  android:id="@+id/calendar_linearLayoutRight"
+                  android:layout_weight="25"
+                  android:paddingLeft="8dp"
+                  android:background="@drawable/agenda_border"
+            >
+
+        <TextView
+                android:id="@+id/title"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:textSize="16sp" android:text="Hörgeräte: Verifikation und Validierung"/>
+
+        <TextView
+                android:id="@+id/dtcalid"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content" android:text="Total Toller Text und so">
+        </TextView>
+    </LinearLayout>
+
+
+</LinearLayout>
+        <!--
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:id="@+id/linearLayout1"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="2dip"
+            android:layout_marginRight="4dip"
+            android:layout_weight="0.75"
+            android:ellipsize="end"
+            android:textSize="16sp"
+            tools:Text="Synthesizing Speech for use in insane crazy nerd models"
+            android:text="THIS IS A BUNCH OF TEXT"/>
+
+    <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dip"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/dtstart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:textSize="10sp"
+                tools:Text="27.06 - 10:00" android:text="18:00"/>
+
+        <TextView
+                android:id="@+id/dtend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:textSize="10sp"
+                tools:Text="- 13:00" android:text="20:00"/>
+        <TextView
+                android:id="@+id/dtcalid"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:textSize="10sp" android:text="whaaaat"/>
+    </LinearLayout>
+
+</LinearLayout>-->

@@ -1,0 +1,76 @@
+<!--
+  Copyright 2013 The Android Open Source Project
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="de.tel.quenference.activities"
+          android:versionCode="7"
+          android:versionName="1.3.1">
+
+    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="17"/>
+    <!--        PERMISSIONS         -->
+    <!--Internet connection-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!--To check the online status-->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <!--Location service-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <!--Write sd card-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <!--Read sd card-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--Read and Write to calendars-->
+    <uses-permission android:name="android.permission.READ_CALENDAR"/>
+    <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
+
+    <application
+            android:label="@string/app_name"
+            android:icon="@drawable/ic_launcher"
+            android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
+            android:allowBackup="true">
+
+        <activity
+                android:name=".SplashActivity"
+                android:screenOrientation="portrait"
+                android:label="@string/app_name"
+                android:theme="@android:style/Theme.Black.NoTitleBar"
+                >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+                android:name=".MainNavigationActivity"
+                android:screenOrientation="portrait"
+                android:label="@string/app_name">
+        </activity>
+        <activity android:name="de.tel.quenference.recommendations.RecommendationsNotifier"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait">
+
+        </activity>
+        <activity android:name="de.tel.quenference.activities.QuestionnaireActivity"
+                  android:label="@string/app_name"
+                  android:screenOrientation="portrait">
+
+        </activity>
+        <receiver android:name="de.tel.quenference.recommendations.RecommendationAlarmService"></receiver>
+        <receiver android:name="de.tel.quenference.questionnaire.QuestAlarmService"></receiver>
+
+    </application>
+
+</manifest>

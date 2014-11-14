@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Calendar Options">
+        <ListPreference
+                android:key="prefAddToCalendarAutomaticallyList"
+                android:entries="@array/prefARaddToCalendarAutomatically"
+                android:entryValues="@array/prefARaddToCalendarAutomaticallyValues"
+                android:defaultValue="2"
+                android:summary="Add favorites to calendar"
+                android:title="Calendar Options"></ListPreference>
+        <EditTextPreference
+                android:id="@+id/settings_which_calendar"
+                android:key="prefWhichCalendar"
+                android:defaultValue="@string/prefStringWhichCalendar"
+                android:title="Calendar ID to add items (clear field to re-pick next time)"
+                >
+        </EditTextPreference>
+        <SwitchPreference
+                android:id="@+id/settings_recommendationPush"
+                android:title="Push notifications"
+                android:maxLines="2"
+                android:key="prefRecommendationPush"
+                android:defaultValue="false"
+                android:text="Enable push notifications for new recommendations"></SwitchPreference>
+    </PreferenceCategory>
+
+</PreferenceScreen>

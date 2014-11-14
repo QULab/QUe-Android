@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+QUe
+
+Copyright (c) 2014 Quality and Usability Lab,
+Telekom Innvation Laboratories, TU Berlin. All rights reserved.
+https://github.com/QULab/QUe-Android
+
+This file is part of QUe.
+
+QUe is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+QUe is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with QUe. If not, see <http://www.gnu.org/licenses/>.
+-->
+<!--<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content" >-->
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="15dp">
+    <!--TITLE SECTION-->
+    <TextView
+            android:id="@+id/session_title_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightBlue"
+            android:textSize="24sp"
+            android:text="@string/session_title_header" android:textColor="@color/white" android:paddingLeft="5sp">
+    </TextView>
+    <TextView
+            android:id="@+id/session_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
+
+    <!--CHAIRS SECTION-->
+    <TextView
+            android:id="@+id/session_chairs_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightBlue"
+            android:textSize="24sp"
+            android:text="@string/session_chairs_header" android:textColor="@color/white" android:paddingLeft="5sp">
+    </TextView>
+    <TextView
+            android:id="@+id/session_chairs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
+    <!--PAPERS SECTION-->
+    <TextView
+            android:id="@+id/session_speeches_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightBlue"
+            android:textSize="24sp"
+            android:text="@string/session_speeches_header" android:textColor="@color/white" android:paddingLeft="5sp">
+    </TextView>
+        <RelativeLayout
+            android:id="@+id/session_speeches"
+            android:layout_width="match_parent"
+            android:layout_height="300dp" android:minHeight="300dp">
+        </RelativeLayout>
+        <FrameLayout
+                android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
+</LinearLayout>
+</ScrollView>
+        <!--</ScrollView>-->

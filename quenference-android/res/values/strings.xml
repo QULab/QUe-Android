@@ -1,0 +1,152 @@
+<!--
+  
+  Copyright 2014 Quality and Usability Lab, Telekom Innvation Laboratories, TU Berlin..
+  
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+  
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+<resources>
+
+    <string name="app_name">Quenference</string>
+    <string-array name="applications">
+        <item>Welcome</item>
+        <item>Agenda</item>
+        <item>Browse</item>
+        <item>Conference Info</item>
+        <item>Conference Map</item>
+        <item>Calendar</item>
+    </string-array>
+    <string name="drawer_open">Open navigation drawer</string>
+    <string name="drawer_close">Close navigation drawer</string>
+    <string name="action_websearch">Search</string>
+    <string name="app_not_available">Sorry, there\'s no web browser available</string>
+    <string name="progress">Please wait&#8230;</string>
+
+
+    <!--PREFERENCES-->
+    <string name="pref_api_key">api_key</string>
+
+    <!--SPLASH SCREEN-->
+    <string name="splash_descr">The splash screen.</string>
+    
+    <!--WELCOME SCREEN-->
+    <string name="welcome_text">Welcome to the Queneference application.</string>
+    <string name="welcome_intro">Short Introduction</string>
+    <string name="welcome_intro_fav">Favorite sessions and papers and even add them to your personal calendar.</string>
+    <string name="welcome_intro_search">Search sessions, papers and authors using the built-in search.</string>
+    <string name="welcome_intro_start">Begin by either tapping the logo on the top left or by using the app-wide search on the top right.</string>
+    <!--SEARCH STRINGS-->
+    <string name="search_value">Search&#8230;</string>
+    <string name="search_title">Search</string>
+    <string name="search_author_tab">Authors</string>
+    <string name="search_session_tab">Sessions</string>
+    <string name="search_paper_tab">Papers</string>
+    <string name="search_no_result">No result&#8230;</string>
+
+    <!--PAPER VIEW STRINGS-->
+    <string name="paper_header_title">Title</string>
+    <string name="paper_header_author">Authors</string>
+    <string name="paper_header_time">Time</string>
+    <string name="paper_header_abstract">Abstract</string>
+    <!--"yyyy-MM-dd'T'hh:mm:ssZ"-->
+    <string name="paper_time_pattern">yyyy-MM-dd\'T\'HH:mm:ssZ</string>
+    <string name="paper_date_locale">en</string>
+    <string name="paper_hour_format">HH:mm</string>
+    <string name="paper_hour_seperator">until</string>
+
+    <!--AUTHOR VIEW STRINGS-->
+    <string name="author_header_name">Name</string>
+    <string name="author_header_affiliation">Affiliation</string>
+    <string name="author_header_papers">Papers</string>
+
+    <!--WEB VIEW STRINGS-->
+    <string name="webview_url">http://www.qu.tu-berlin.de/</string>
+    <string name="webview_info_title">Info</string>
+
+    <!--SESSION VIEW STRINGS-->
+    <string name="session_title_header">Title</string>
+    <string name="session_chairs_header">Chair and co-chair</string>
+    <string name="session_chairs">Chair: %1$s \nCo-Chair: %2$s</string>
+    <string name="session_speeches_header">Speeches</string>
+    <!--MAP VIEW STRINGS-->
+    <string name="map_image_descr">Map-Image</string>
+    <string name="map_indicator_str">%1$d / %2$d</string>
+
+
+    <!--PREFERENCES STRING -->
+    <string-array name="prefARaddToCalendarAutomatically">
+        <item name="0">Add to my calendar automatically</item>
+        <item name="1">Don\'t add items to my calendar</item>
+        <item name="2">Ask me every time</item>
+    </string-array>
+    <string-array name="prefARaddToCalendarAutomaticallyValues">
+        <item name="0">0</item>
+        <!--Add automatically-->
+        <item name="1">1</item>
+        <!--Never add-->
+        <item name="2">2</item>
+        <!--Ask-->
+    </string-array>
+    <string name="prefStringWhichCalendar"></string>
+
+    <!--ALERT DIALOG STRINGS-->
+    <!--AUTH DIALOG-->
+    <string name="alert_auth_required">Authentication required</string>
+    <string name="alert_auth_choose">Please choose an authentication method.</string>
+    <string name="alert_auth_registered_button">Registered attendee</string>
+    <string name="alert_auth_paper_button">Paper password</string>
+    <string name="alert_paper_view_url">
+        http://docs.google.com/gview?embedded=true&amp;url=http://conference1.service.tu-berlin.de/v1/conferences/6/papers/%1$d/download?api_key=%2$s
+    </string>
+    <string name="alert_paper_view_url_direct">
+        http://conference1.service.tu-berlin.de/v1/conferences/6/papers/%1$d/download?api_key=%2$s
+    </string>
+    <!--EMAIL DIALOG-->
+    <string name="alert_email_title">Email address</string>
+    <string name="alert_email_descr">
+        Please input your email address that you registered with for the conference.
+    </string>
+    <string name="alert_email_hint">Email</string>
+    <string name="alert_submit">Submit</string>
+    <string name="alert_cancel">Cancel</string>
+    <string name="alert_email_register_url">
+        http://conference1.service.tu-berlin.de/v1/conferences/6/register/user
+    </string>
+    <string name="alert_email_device_os">Android %1$s</string>
+    <string name="alert_email_register_failed">
+        Registration failed, please use the one time password. You will be able to retrieve it at the registration desk.
+    </string>
+    <!--PASSWORD DIALOG-->
+    <string name="alert_password_title">Password</string>
+    <string name="alert_password_descr">
+        Please input the password that you just received by email.
+    </string>
+    <string name="alert_password_url">
+        http://conference1.service.tu-berlin.de/v1/conferences/6/unlock/key/%1$s
+    </string>
+    <string name="alert_pw_register_failed">
+        Registration failed, please try again.
+    </string>
+    <!--PAPER PASSWORD DIALOG-->
+
+    <string name="alert_paper_password_title">Paper Password</string>
+    <string name="alert_paper_password_descr">
+        Please input your email address and the password that
+        you received at the registration desk.
+    </string>
+    <string name="alert_paper_password_login">Login</string>
+    <string name="alert_paper_password_pw">Password</string>
+    <string name="alert_paper_password_submit_button">Submit</string>
+    <string name="alert_paper_password_url">
+        http://conference1.service.tu-berlin.de/v1/conferences/6/register/attendee
+    </string>
+</resources>

@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+QUe
+
+Copyright (c) 2014 Quality and Usability Lab,
+Telekom Innvation Laboratories, TU Berlin. All rights reserved.
+https://github.com/QULab/QUe-Android
+
+This file is part of QUe.
+
+QUe is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+QUe is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with QUe. If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="vertical"
+              android:layout_margin="15dp">
+    <!--NAME SECTION-->
+    <!--    <TextView
+            android:id="@+id/author_header_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/light_gray"
+            android:textSize="24sp"
+            android:text="@string/author_header_name">
+        </TextView>
+        <TextView
+          android:id="@+id/author_name"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
+          android:textStyle="bold"
+          android:layout_marginTop="15dp"
+          android:layout_marginBottom="15dp" />-->
+
+    <!--AFFILIATION SECTION-->
+    <TextView
+            android:id="@+id/author_header_affiliation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightBlue"
+            android:textSize="24sp"
+            android:text="@string/author_header_affiliation" android:textColor="@color/white" android:paddingLeft="5sp">
+    </TextView>
+    <TextView
+            android:id="@+id/author_affiliation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
+    <!--PAPERS SECTION-->
+    <TextView
+            android:id="@+id/author_header_papers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/lightBlue"
+            android:textSize="24sp"
+            android:text="@string/author_header_papers" android:textColor="@color/white" android:paddingLeft="5sp">
+    </TextView>
+    <FrameLayout
+            android:id="@+id/author_papers"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"/>
+
+
+</LinearLayout> 
