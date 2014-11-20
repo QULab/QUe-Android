@@ -195,7 +195,7 @@ public class ConferenceDAO {
         AsyncDBListReader listReader = new AsyncDBListReader(values, columns, tableName,
                 extract, postJob, selection,
                 selectionArgs, groupBy, having,
-                orderBy, context);
+                orderBy);
         listReader.execute(context);
     }
 

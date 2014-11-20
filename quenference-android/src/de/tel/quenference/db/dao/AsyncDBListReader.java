@@ -1,19 +1,25 @@
 /*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
+ * Copyright 2014 Quality and Usability Lab, Telekom Innvation Laboratories, TU Berlin..
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package de.tel.quenference.db.dao;
 
-import android.app.Activity;
-import android.util.Log;
-import android.widget.Toast;
-import de.tel.quenference.activities.MainNavigationActivity;
-import de.tel.quenference.db.ConferenceDBHelper;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
-
+import de.tel.quenference.db.ConferenceDBHelper;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,8 +39,6 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
     private String groupBy;
     private String having;
     private String orderBy;
-    private Context context;
-    private String TAG = "AsyncDBListReader says: ";
 
     public AsyncDBListReader(List values, String[] columns, String tableName,
                              CursorExtractor extract, PostExecuteJob postJob) {
@@ -47,7 +51,7 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
 
     public AsyncDBListReader(List values, String[] columns, String tableName,
                              CursorExtractor extract, PostExecuteJob postJob, String selection,
-                             String[] selectionArgs, String groupBy, String having, String orderBy, Context context) {
+                             String[] selectionArgs, String groupBy, String having, String orderBy) {
         this.values = values;
         this.columns = columns;
         this.tableName = tableName;
@@ -58,22 +62,11 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
         this.having = having;
         this.orderBy = orderBy;
         this.postJob = postJob;
-        this.context = context;
     }
 
-    @Override
-    protected void onPreExecute() {
-        ((Activity) context).runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "On Pre-execute");
-            }
-        });
-    }
 
     @Override
     protected List doInBackground(Context... context) {
-        Log.d(TAG, "doing stuff in Background");
         if (columns == null || extract == null || tableName == null
                 || context == null || context.length == 0) {
             throw new IllegalStateException();
@@ -101,7 +94,6 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
     @Override
     protected void onPostExecute(List result) {
         super.onPostExecute(result);
-
         postJob.doJob(result);
     }
 
