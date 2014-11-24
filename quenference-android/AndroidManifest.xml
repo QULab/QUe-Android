@@ -34,7 +34,6 @@
     <!--Read and Write to calendars-->
     <uses-permission android:name="android.permission.READ_CALENDAR"/>
     <uses-permission android:name="android.permission.WRITE_CALENDAR"/>
-    <uses-permission android:name="android.permission.WAKE_LOCK"></uses-permission>
 
     <application
             android:label="@string/app_name"
@@ -58,19 +57,6 @@
                 android:screenOrientation="portrait"
                 android:label="@string/app_name">
         </activity>
-        <activity android:name="de.tel.quenference.recommendations.RecommendationsNotifier"
-                  android:label="@string/app_name"
-                  android:screenOrientation="portrait">
-
-        </activity>
-        <activity android:name="de.tel.quenference.activities.QuestionnaireActivity"
-                  android:label="@string/app_name"
-                  android:screenOrientation="portrait">
-
-        </activity>
-        <receiver android:name="de.tel.quenference.recommendations.RecommendationAlarmService"></receiver>
-        <receiver android:name="de.tel.quenference.questionnaire.QuestAlarmService"></receiver>
-
     </application>
 
 </manifest>
