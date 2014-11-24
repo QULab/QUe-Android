@@ -60,7 +60,7 @@ public class AuthorPapersListFragment extends SearchFragmentVP {
               SQLQuery q = builder.build();
               
               Cursor c = db.query(ConferenceDBContract.ConferencePaper.TABLE_NAME,
-                                  ConferenceDAO.paperColumns, q.getSelection(),
+                                  ConferenceDAO.PAPER_COLUMNS, q.getSelection(),
                                   q.getSelectionArgs(), q.getGroupBy(),
                                   q.getHaving(), q.getHaving());
               c.moveToFirst();  

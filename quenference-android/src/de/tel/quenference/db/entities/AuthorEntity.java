@@ -20,19 +20,19 @@ package de.tel.quenference.db.entities;
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class AuthorEntity extends BaseEntity {
-  private Integer id;
-  private String firstName;
-  private String lastName;
   private String affiliation;
+  private String firstName;
+  private Integer id;
+  private String lastName;
 
   public AuthorEntity() {
   }
 
-  public AuthorEntity(Integer id, String firstName, String lastName, String affiliation) {
-    this.id = id;
-    this.firstName = firstName;
-    this.lastName = lastName;
+  public AuthorEntity(String affiliation, String firstName, Integer id, String lastName) {
     this.affiliation = affiliation;
+    this.firstName = firstName;
+    this.id = id;
+    this.lastName = lastName;
   }
   
   public Integer getId() {

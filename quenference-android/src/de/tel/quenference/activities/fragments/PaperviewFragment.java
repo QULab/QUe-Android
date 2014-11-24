@@ -164,7 +164,7 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
                                     SQLQuery q = builder.build();
 
                                     Cursor c = db.query(ConferenceDBContract.ConferenceAuthor.TABLE_NAME,
-                                            ConferenceDAO.authorColumns, q.getSelection(),
+                                            ConferenceDAO.AUTHOR_COLUMNS, q.getSelection(),
                                             q.getSelectionArgs(), q.getGroupBy(),
                                             q.getHaving(), q.getHaving());
                                     c.moveToFirst();

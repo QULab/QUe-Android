@@ -15,8 +15,6 @@
  */
 package de.tel.quenference.db;
 
-import android.provider.BaseColumns;
-
 /**
  * Represents the contract with the SQLiteDatabase. Contains all tables and
  * there column names etc. and also the CREATE and DROP statements.
@@ -58,7 +56,6 @@ public class ConferenceDBContract {
           INT_TYPE,
           ConferenceAuthor.COLUMN_NAME_FIRST_NAME + TEXT_TYPE + COMMA_SEP
           + ConferenceAuthor.COLUMN_NAME_LAST_NAME + TEXT_TYPE + COMMA_SEP
-          + ConferenceAuthor.COLUMN_NAME_EMAIL + TEXT_TYPE + COMMA_SEP
           + ConferenceAuthor.COLUMN_NAME_AFFILIATION + TEXT_TYPE);
   /**
    * SQL create statement for the paper table.
@@ -132,66 +129,65 @@ public class ConferenceDBContract {
    * The abstract class which contains all columns and the name of the author
    * table.
    */
-  public static abstract class ConferenceAuthor implements BaseColumns {
+  public static abstract class ConferenceAuthor {
 
-    public static final String TABLE_NAME = "author";
-    public static final String COLUMN_NAME_ID = "id";
-    public static final String COLUMN_NAME_FIRST_NAME = "first_name";
-    public static final String COLUMN_NAME_LAST_NAME = "last_name";
-    public static final String COLUMN_NAME_EMAIL = "email";
     public static final String COLUMN_NAME_AFFILIATION = "affiliation";
+    public static final String COLUMN_NAME_FIRST_NAME = "first_name";
+    public static final String COLUMN_NAME_ID = "id";
+    public static final String COLUMN_NAME_LAST_NAME = "last_name";
+    public static final String TABLE_NAME = "author";
   }
 
   /**
    * The abstract class which contains all columns and the name of the paper
    * table.
    */
-  public static abstract class ConferencePaper implements BaseColumns {
+  public static abstract class ConferencePaper {
 
-    public static final String TABLE_NAME = "paper";
+    public static final String COLUMN_NAME_ABSTRACT = "abstract";
+    public static final String COLUMN_NAME_DATETIME = "datetime";
+    public static final String COLUMN_NAME_DATETIME_END = "datetime_end";
+    public static final String COLUMN_NAME_FAVORITE = "favorite";
     public static final String COLUMN_NAME_ID = "id";
-    public static final String COLUMN_NAME_SUBMISSION_ID = "submission_id";
-    public static final String COLUMN_NAME_TITLE = "title";
+    public static final String COLUMN_NAME_KEYWORDS = "keywords";
     public static final String COLUMN_NAME_MAIN_AUTHOR = "main_author";
     public static final String COLUMN_NAME_MAIN_AUTHOR_ID = "main_author_id";
     public static final String COLUMN_NAME_PAPER_CODE = "paper_code";
-    public static final String COLUMN_NAME_DATETIME = "datetime";
-    public static final String COLUMN_NAME_DATETIME_END = "datetime_end";
-    public static final String COLUMN_NAME_KEYWORDS = "keywords";
     public static final String COLUMN_NAME_SESSION = "session";
-    public static final String COLUMN_NAME_ABSTRACT = "abstract";
-    public static final String COLUMN_NAME_FAVORITE = "favorite";
+    public static final String COLUMN_NAME_SUBMISSION_ID = "submission_id";
+    public static final String COLUMN_NAME_TITLE = "title";
+    public static final String TABLE_NAME = "paper";
   }
 
   /**
    * The abstract class which contains all columns and
    * the name of the session table.
    */
-  public static abstract class ConferenceSession implements BaseColumns {
+  public static abstract class ConferenceSession {
 
-    public static final String TABLE_NAME = "session";
-    public static final String COLUMN_NAME_ID = "id";
-    public static final String COLUMN_NAME_DAY = "day";
+    public static final String COLUMN_NAME_CHAIR = "chair";
+    public static final String COLUMN_NAME_CODE = "code";
+    public static final String COLUMN_NAME_CO_CHAIR = "co_chair";
     public static final String COLUMN_NAME_DATETIME = "datetime";
+    public static final String COLUMN_NAME_DAY = "day";
+    public static final String COLUMN_NAME_FAVORITE = "favorite";
+    public static final String COLUMN_NAME_ID = "id";
+    public static final String COLUMN_NAME_LENGTH = "length";
+    public static final String COLUMN_NAME_ROOM = "room";
     public static final String COLUMN_NAME_TITLE = "title";
     public static final String COLUMN_NAME_TYPE = "type";
     public static final String COLUMN_NAME_TYPE_NAME = "type_name";
-    public static final String COLUMN_NAME_CODE = "code";
-    public static final String COLUMN_NAME_LENGTH = "length";
-    public static final String COLUMN_NAME_ROOM = "room";
-    public static final String COLUMN_NAME_CHAIR = "chair";
-    public static final String COLUMN_NAME_CO_CHAIR = "co_chair";
-    public static final String COLUMN_NAME_FAVORITE = "favorite";
+    public static final String TABLE_NAME = "session";
   }
 
   /**
    * The abstract class which contains all columns and 
    * the name of the paper-authors table.
    */
-  public static abstract class ConferencePaperAuthors implements BaseColumns {
+  public static abstract class ConferencePaperAuthors {
 
-    public static final String TABLE_NAME = "paperAuthors";
     public static final String COLUMN_NAME_AUTHOR_ID = "authorID";
     public static final String COLUMN_NAME_PAPER_ID = "paperID";
+    public static final String TABLE_NAME = "paperAuthors";
   }
 }

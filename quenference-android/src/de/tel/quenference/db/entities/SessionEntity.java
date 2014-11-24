@@ -10,36 +10,39 @@ package de.tel.quenference.db.entities;
  */
 public class SessionEntity extends BaseEntity {
   
-  private Integer id;
-  private Integer day;
+  private String chair;
+  private String code;
+  private String coChair;
   private String datetime;
+  private Integer day;
+  private Boolean favorite;
+  private Integer id;
+  private Integer length;
+  private String room;
   private String title;
   private String type;
   private String typeName;
-  private String code;
-  private Integer length;
-  private String room;
-  private String chair;
-  private String coChair;
-  private Boolean favorite;
+  
   public SessionEntity() {
   }
 
-  public SessionEntity(Integer id, Integer day, String datetime, String title, String type, String typeName, String code, Integer length, String room, String chair, String coChair, Integer fav) {
-    this.id = id;
-    this.day = day;
+  public SessionEntity(String chair, String code, String coChair, String datetime, Integer day, Integer favorite, Integer id, Integer length, String room, String title, String type, String typeName) {
+    this.chair = chair;
+    this.code = code;
+    this.coChair = coChair;
     this.datetime = datetime;
+    this.day = day;
+    this.favorite = favorite != 0;
+    this.id = id;
+    this.length = length;
+    this.room = room;
     this.title = title;
     this.type = type;
     this.typeName = typeName;
-    this.code = code;
-    this.length = length;
-    this.room = room;
-    this.chair = chair;
-    this.coChair = coChair;
-    this.favorite = fav != 0;
   }
 
+  
+  
   public Integer getId() {
     return id;
   }
