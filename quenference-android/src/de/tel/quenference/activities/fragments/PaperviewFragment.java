@@ -75,7 +75,7 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setFavIcon(ConferenceDAO.getFavoriteByID("paper", paper.getId(), getActivity()));
+        setFavIcon(paper.getFavorite());
     }
 
     @Override

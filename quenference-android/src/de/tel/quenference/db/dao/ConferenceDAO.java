@@ -278,30 +278,4 @@ public class ConferenceDAO {
     db.close();
     return entity;
   }
-
-  public static boolean getFavoriteByID(String paperOrSession, int id, Context context) {
-    ConferenceDBHelper dbHelper = new ConferenceDBHelper(context);
-    SQLiteDatabase db = dbHelper.getReadableDatabase();
-    int answer = 99;
-    if (paperOrSession.equals("paper")) {
-      Cursor queryCursor = db.query(ConferenceDBContract.ConferencePaper.TABLE_NAME,
-              null, ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + " = " + id,
-              null, null, null, null);
-      if (queryCursor.moveToFirst()) {
-        answer = queryCursor.getInt(11);
-      }
-      queryCursor.close();
-    } else if (paperOrSession.equals("session")) {
-      Cursor queryCursor = db.query(ConferenceDBContract.ConferenceSession.TABLE_NAME,
-              null, ConferenceDBContract.ConferenceSession.COLUMN_NAME_ID + " = " + id,
-              null, null, null, null);
-      if (queryCursor.moveToFirst()) {
-        answer = queryCursor.getInt(11);
-
-      }
-      queryCursor.close();
-    }
-    db.close();
-    return answer == 1;
-  }
 }

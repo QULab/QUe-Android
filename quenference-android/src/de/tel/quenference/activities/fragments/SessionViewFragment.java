@@ -62,7 +62,7 @@ public class SessionViewFragment extends FavoriteMenuFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setFavIcon(ConferenceDAO.getFavoriteByID("session", session.getId(), getActivity()));
+        setFavIcon(session.getFavorite());
         System.out.println("onResume: favoriteicon is being set to:" + session.getFavorite());
 
     }
