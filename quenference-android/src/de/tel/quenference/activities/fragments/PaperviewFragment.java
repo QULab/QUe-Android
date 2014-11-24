@@ -75,7 +75,7 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
     @Override
     public void onResume() {
         super.onResume();
-        setFavIcon(paper.getFavorite());
+        setFavIcon(favorited);
     }
 
     @Override
