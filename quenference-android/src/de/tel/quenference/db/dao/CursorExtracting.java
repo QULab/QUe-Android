@@ -18,8 +18,8 @@ package de.tel.quenference.db.dao;
 import android.database.Cursor;
 
 /**
- * Represents an CursorExtractor which will be used for extracting a value or a
- * class with his fields from a database cursor.
+ * Represents an CursorExtracting interface which will be used
+ * for extracting a value or a class with his fields from a database cursor.
  *
  * @author Christopher Zell <zelldon91@googlemail.com>
  */

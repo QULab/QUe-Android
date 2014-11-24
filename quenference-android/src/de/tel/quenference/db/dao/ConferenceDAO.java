@@ -47,40 +47,86 @@ import org.json.JSONObject;
  */
 public class ConferenceDAO {
 
+  /**
+   * Returns for the given class the declared fields. The method is used to get
+   * the columns of the tables from the DB contract.
+   *
+   *
+   * @param c the class which represents the database table
+   * @return the corresponding columns
+   */
   private static String[] getColumns(Class c) {
     Field fields[] = c.getDeclaredFields();
     String values[] = new String[fields.length];
     for (int i = 0; i < fields.length; i++) {
       try {
-        if (!fields[i].getName().equalsIgnoreCase("TABLE_NAME"))
+        if (!fields[i].getName().equalsIgnoreCase("TABLE_NAME")) {
           values[i] = fields[i].get(null).toString();
+        }
       } catch (IllegalAccessException ex) {
         Logger.getLogger(ConferenceDAO.class.getName()).log(Level.SEVERE, null, ex);
       } catch (IllegalArgumentException ex) {
         Logger.getLogger(ConferenceDAO.class.getName()).log(Level.SEVERE, null, ex);
-      } 
+      }
     }
     return values;
   }
-  
-  
+  /**
+   * The columns of the author table.
+   */
   public static final String[] AUTHOR_COLUMNS = getColumns(ConferenceDBContract.ConferenceAuthor.class);
+  /**
+   * The columns of the paper table.
+   */
   public static final String[] PAPER_COLUMNS = getColumns(ConferenceDBContract.ConferencePaper.class);
+  /**
+   * The columns of the session table.
+   */
   public static final String[] SESSION_COLUMNS = getColumns(ConferenceDBContract.ConferenceSession.class);
+  /**
+   * The columns of the paper-authors relation table.
+   */
   public static final String[] paperAuthorsColumns = getColumns(ConferenceDBContract.ConferencePaperAuthors.class);
-  
+  /**
+   * The key for the authors etag which is saved in the preferences.
+   */
   private static final String KEY_AUTHORS_ETAG = "authors";
+  /**
+   * The URL for the author values.
+   */
   private static final String URL_AUTHORS = PropertiesProvider.getInstance().getProperty(PropertiesProvider.AUTHORS_URL_PROP);
-  //"http://conference1.service.tu-berlin.de/v1/conferences/8/authors";
+  /**
+   * The key for the papers etag which is saved in the preferences.
+   */
   private static final String KEY_PAPERS_ETAG = "papers";
+  /**
+   * The json key which is used to identify the papers array.
+   */
   private static final String JSON_KEY_PAPERS = KEY_PAPERS_ETAG;
+  /**
+   * The json key which is used to identify the batch array. The batch array
+   * contains all other values.
+   */
   private static final String JSON_KEY_BATCH = "batch_download";
+  /**
+   * The URL for the paper values.
+   */
   private static final String URL_PAPERS = PropertiesProvider.getInstance().getProperty(PropertiesProvider.PAPERS_URL_PROP);
-  //"http://conference1.service.tu-berlin.de/v1/conferences/8/batch";
+  /**
+   * The key for the sessions etag which is saved in the preferences.
+   */
   private static final String KEY_SESSIONS_ETAG = "sessions";
+  /**
+   * The URL for the session values.
+   */
   private static final String URL_SESSIONS = PropertiesProvider.getInstance().getProperty(PropertiesProvider.SESSIONS_URL_PROP);
-  //"http://conference1.service.tu-berlin.de/v1/conferences/8/sessions";
 
+  /**
+   * Updates the database with the new values from the web service. The saved
+   * etags are checked if they are equal nothing is done.
+   *
+   * @param context the application context to update the database
+   */
   public static void updateDB(Context context) {
     if (context == null) {
       throw new IllegalArgumentException();
@@ -143,15 +189,40 @@ public class ConferenceDAO {
     DB_HELPER.close();
   }
 
+  /**
+   * The Entity enum represents the entities or also named tables from the
+   * database.
+   */
   public enum Entity {
 
     SESSION, AUTHOR, PAPER, PAPER_AUTHORS
   }
 
+  /**
+   * Executes the SQL Query which returns for the given entity the hole table
+   * with all values. The return value is processed in the post job.
+   *
+   * @param context the application context which is used
+   * @param entity the entity which represents the requested table
+   * @param postJob the job which will be executed after the query
+   */
   public static void getList(Context context, Entity entity, AsyncDBListReader.PostExecuteJob postJob) {
     getSelection(context, entity, postJob, null, null, null, null, null);
   }
 
+  /**
+   * Executes the SQL query for the entity on the corresponding table. The
+   * return value is processed in the post job.
+   *
+   * @param context the application context which is used
+   * @param entity the entity which represents the requested table
+   * @param postJob the job which will be executed after the query
+   * @param selection the selection of the SQL query - where clause
+   * @param selectionArgs the arguments for the selection
+   * @param groupBy the group by clause of the SQL query
+   * @param having the having clause of the SQL query
+   * @param orderBy the order by clause of the SQL query
+   */
   public static void getSelection(Context context, Entity entity, AsyncDBListReader.PostExecuteJob postJob,
           String selection, String[] selectionArgs, String groupBy, String having,
           String orderBy) {
@@ -199,22 +270,54 @@ public class ConferenceDAO {
     listReader.execute(context);
   }
 
+  /**
+   * Returns the SessionExtractor object to extract the session from a given
+   * cursor object.
+   *
+   * @return the SessionExtractor object
+   */
   public static CursorExtracting getSessionCursorExtractor() {
     return new SessionExtractor();
   }
 
+  /**
+   * Returns the PaperExtractor object to extract the session from a given
+   * cursor object.
+   *
+   * @return the PaperExtractor object
+   */
   public static CursorExtracting getPaperCursorExtractor() {
     return new PaperExtractor();
   }
 
+  /**
+   * Returns the PaperExtractor object to extract the session from a given
+   * cursor object.
+   *
+   * @return the AuthorExtractor object
+   */
   public static CursorExtracting getAuthorCursorExtractor() {
     return new AuthorExtractor();
   }
-  
+
+  /**
+   * Returns the PaperAuthorsExtractor object to extract the session from a
+   * given cursor object.
+   *
+   * @return the PaperAuthorsExtractor object
+   */
   public static CursorExtracting getPaperAuthorsCursorExtractor() {
     return new PaperAuthorsExtractor();
   }
 
+  /**
+   * Updates with the given SQLQuery the corresponding entity/entities in the
+   * database.
+   *
+   * @param context the application context which is used
+   * @param query the SQL query which selects the rows and contains the new
+   * values
+   */
   public static void updateEntity(Context context, SQLQuery query) {
     AsyncDBEntityUpdater updater = null;
     Entity e = query.getSelectedEntity();
@@ -242,6 +345,13 @@ public class ConferenceDAO {
     }
   }
 
+  /**
+   * Returns the SessionEntity for the given id from the database.
+   *
+   * @param id the session id
+   * @param context the application context which will be used
+   * @return the corresponding SessionEntity object
+   */
   public static SessionEntity getSessionByID(String id, Context context) {
     //Creates a SessionEntity from the database entry at row ID
     SessionEntity entity = new SessionEntity();
@@ -260,6 +370,13 @@ public class ConferenceDAO {
     return entity;
   }
 
+  /**
+   * Returns the PaperEntity for the given id from the database.
+   * 
+   * @param id the paper id
+   * @param context the application context which will be used
+   * @return the corresponding PaperEntity object
+   */
   public static PaperEntity getPaperByID(String id, Context context) {
     PaperEntity entity = new PaperEntity();
     ConferenceDBHelper dbHelper = new ConferenceDBHelper(context);
@@ -271,7 +388,7 @@ public class ConferenceDAO {
     if (c.moveToFirst()) {
       //create the PaperEntity from the cursor data
       //beware: the paper abstract is read at cursor position 9, but paper requires it at cursor position 3...
-      
+
       entity = (PaperEntity) getPaperCursorExtractor().extract(c);
     }
     c.close();
