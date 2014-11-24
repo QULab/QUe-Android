@@ -51,7 +51,7 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
   /**
    * The extractor which will be used to extract the values from the result set.
    */
-  private CursorExtractor extract;
+  private CursorExtracting extract;
   
   /**
    * The job which will be executed after the SQL query was executed.
@@ -98,7 +98,7 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
    * @param postJob             the job which will be executed after the SQL query was executed
    */
   public AsyncDBListReader(List values, String[] columns, String tableName,
-          CursorExtractor extract, PostExecuteJob postJob) {
+          CursorExtracting extract, PostExecuteJob postJob) {
     this.values = values;
     this.columns = columns;
     this.tableName = tableName;
@@ -122,7 +122,7 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
    * @param orderBy             the order by clause for the SQL Statement
    */
   public AsyncDBListReader(List values, String[] columns, String tableName,
-          CursorExtractor extract, PostExecuteJob postJob, String selection,
+          CursorExtracting extract, PostExecuteJob postJob, String selection,
           String[] selectionArgs, String groupBy, String having, String orderBy) {
     this.values = values;
     this.columns = columns;
@@ -166,22 +166,6 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
   protected void onPostExecute(List result) {
     super.onPostExecute(result);
     postJob.doJob(result);
-  }
-
-  /**
-   * Represents an CursorExtractor which will be used
-   * for extracting a value or a class with his fields from a 
-   * database cursor.
-   */
-  public interface CursorExtractor {
-
-    /**
-     * The extract method which will be used to extract the values.
-     * 
-     * @param c           the cursor which contains the values
-     * @return            the extracted object
-     */
-    public Object extract(Cursor c);
   }
 
   /**
