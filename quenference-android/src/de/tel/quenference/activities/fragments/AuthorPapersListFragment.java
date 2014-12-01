@@ -56,9 +56,8 @@ public class AuthorPapersListFragment extends SearchFragmentVP {
             SQLiteDatabase db = DB_HELPER.getReadableDatabase();
             for (Object obj : result) {
               String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-              SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
-              builder.addArgs(((PaperAuthorsEntity) obj).getPaperID().toString());
-              SQLQuery q = builder.build();
+              SQLQuery q = new SQLQuery(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
+              q.setSelectionArgs(((PaperAuthorsEntity) obj).getPaperID().toString());
               
               Cursor c = db.query(ConferenceDBContract.ConferencePaper.TABLE_NAME,
                                   ConferenceDAO.PAPER_COLUMNS, q.getSelection(),

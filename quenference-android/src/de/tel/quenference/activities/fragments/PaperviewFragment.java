@@ -32,7 +32,6 @@ import de.tel.quenference.db.Entity;
 import de.tel.quenference.db.dao.AsyncDBListReader;
 import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
-import de.tel.quenference.db.dao.SQLQuery.Builder;
 import de.tel.quenference.db.entities.AuthorEntity;
 import de.tel.quenference.db.entities.PaperAuthorsEntity;
 import de.tel.quenference.db.entities.PaperEntity;
@@ -144,9 +143,8 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
     private void setAuthors(final TextView view) {
         final StringBuilder builder = new StringBuilder("");
         String selection = ConferenceDBContract.ConferencePaperAuthors.COLUMN_NAME_PAPER_ID + SQLQuery.SQL_SEARCH_EQUAL;
-        SQLQuery.Builder queryBuilder = new SQLQuery.Builder(selection, Entity.PAPER_AUTHORS, ConferenceDAO.PAPER_COLUMNS);
-        queryBuilder.addArgs(paper.getId().toString());
-        SQLQuery query = queryBuilder.build();
+        SQLQuery query = new SQLQuery(selection, Entity.PAPER_AUTHORS, ConferenceDAO.PAPER_AUTHORS_COLUMNS);
+        query.setSelectionArgs(paper.getId().toString());
         ConferenceDAO.getSelection(getActivity(),
                 new AsyncDBListReader.PostExecuteJob() {
 
@@ -160,14 +158,13 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
                                 SQLiteDatabase db = DB_HELPER.getReadableDatabase();
                                 for (Object obj : result) {
                                     String select = ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-                                    SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
-                                    builder.addArgs(((PaperAuthorsEntity) obj).getAuthorID().toString());
-                                    SQLQuery q = builder.build();
+                                    SQLQuery query = new SQLQuery(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
+                                    query.setSelectionArgs(((PaperAuthorsEntity) obj).getAuthorID().toString());
 
                                     Cursor c = db.query(ConferenceDBContract.ConferenceAuthor.TABLE_NAME,
-                                            ConferenceDAO.AUTHOR_COLUMNS, q.getSelection(),
-                                            q.getSelectionArgs(), q.getGroupBy(),
-                                            q.getHaving(), q.getHaving());
+                                            ConferenceDAO.AUTHOR_COLUMNS, query.getSelection(),
+                                            query.getSelectionArgs(), query.getGroupBy(),
+                                            query.getHaving(), query.getHaving());
                                     c.moveToFirst();
                                     while (!c.isAfterLast()) {
                                         AuthorEntity p = (AuthorEntity) ConferenceDAO.getAuthorCursorExtractor().extract(c);
@@ -208,20 +205,20 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
     }
 
     @Override
-    Builder getFavoriteUpdateSQLQuery() {
+    protected SQLQuery getFavoriteUpdateSQLQuery() {
         String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-        SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
-        builder.addArgs(paper.getId().toString());
-        return builder;
+        SQLQuery query = new SQLQuery(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
+        query.setSelectionArgs(paper.getId().toString());
+        return query;
     }
 
     @Override
-    String getFavoriteColumnName() {
+    protected String getFavoriteColumnName() {
         return ConferenceDBContract.ConferencePaper.COLUMN_NAME_FAVORITE;
     }
 
     @Override
-    Serializable getEntity() {
+    protected Serializable getEntity() {
         return paper;
     }
 }

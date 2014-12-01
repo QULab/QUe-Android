@@ -1,24 +1,17 @@
 /*
- * QUe
- * 
- * Copyright (c) 2014 Quality and Usability Lab,
- * Telekom Innvation Laboratories, TU Berlin. All rights reserved.
- * https://github.com/QULab/QUe-Android
- * 
- * This file is part of QUe.
- * 
- * QUe is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- * 
- * QUe is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- * 
- * You should have received a copy of the GNU General Public License
- * along with QUe. If not, see <http://www.gnu.org/licenses/>.
+ * Copyright 2014 Quality and Usability Lab, Telekom Innvation Laboratories, TU Berlin..
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 package de.tel.quenference.db.dao;
 
@@ -27,104 +20,141 @@ import de.tel.quenference.db.Entity;
 import java.io.Serializable;
 
 /**
+ * Represents the SQLQuery class which contains all necessary informations for a
+ * SQL query.
+ *
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
-
 public class SQLQuery implements Serializable {
 
-    /**
-     * The SQL LIKE expression which will be used to search a value
-     * which should be like the given value.
-     */
-    public static final String SQL_SEARCH_LIKE = " LIKE ? ";
+  /**
+   * The SQL LIKE expression which will be used to search a value which should
+   * be like the given value.
+   */
+  public static final String SQL_SEARCH_LIKE = " LIKE ? ";
+  /**
+   * The SQL equal operator which will be used to search a value which should be
+   * equal the given value
+   */
+  public static final String SQL_SEARCH_EQUAL = " = ?";
+  /**
+   * The SQL OR operator which will be used for the where clause.
+   */
+  public static final String SQL_OR = " OR ";
+  /**
+   * The ascending order for the order by clause.
+   */
+  public static final String SQL_ASC_ORDER = " ASC";
+  /**
+   * The descending order for the order by clause.
+   */
+  public static final String SQL_DESC_ORDER = " DESC";
+  /**
+   * The SQL percentage operator which will be used with the LIKE operator.
+   */
+  public static final String SQL_VARIABLE_EXP = "%";
+  /**
+   * The requested columns from the SQL query.
+   */
+  private String[] requestedColumns;
+  /**
+   * The selection of the SQL Query (where clause).
+   */
+  private String selection;
+  /**
+   * The arguments for the selection of the SQL Query.
+   */
+  private String[] selectionArgs;
+  /**
+   * The selected entity is equal with the from clause of the SQL query.
+   */
+  private Entity selectedEntity;
+  /**
+   * The order by clause of the SQL query.
+   */
+  private String orderBy;
+  /**
+   * The group by clause of the SQL query.
+   */
+  private String groupBy;
+  /**
+   * The having clause of the SQL query.
+   */
+  private String having;
+  /**
+   * The values which will be used for an update SQL query. Key-value pairs with
+   * column as key and value as value.
+   */
+  private ContentValues values;
 
-    public static final String SQL_SEARCH_EQUAL = " = ?";
-    /**
-     * The SQL OR operator which will be used for the where clause.
-     */
-    public static final String SQL_OR = " OR ";
+  /**
+   * The ctor to construct a SQLQuery object.
+   *
+   * @param selection the selection of the SQLQuery
+   * @param selectedEntity the selected entity/table of the query
+   * @param requestedColumns the requested columns of the query
+   */
+  public SQLQuery(String selection, Entity selectedEntity, String[] requestedColumns) {
+    this.selection = selection;
+    this.selectedEntity = selectedEntity;
+    this.requestedColumns = requestedColumns;
+  }
 
-    public static final String SQL_ASC_ORDER = " ASC";
+  public String getSelection() {
+    return selection;
+  }
 
-    public static final String SQL_DESC_ORDER = " DESC";
+  public void setSelection(String selection) {
+    this.selection = selection;
+  }
 
-    /**
-     * The SQL percentage operator which will be used with the LIKE operator.
-     */
-    public static final String SQL_VARIABLE_EXP = "%";
+  public String[] getSelectionArgs() {
+    return selectionArgs;
+  }
 
+  public void setSelectionArgs(String... selectionArgs) {
+    this.selectionArgs = selectionArgs;
+  }
 
+  public Entity getSelectedEntity() {
+    return selectedEntity;
+  }
 
-    private String[] requestedColumns;
-    private String selection;
-    private String[] selectionArgs;
-    private Entity selectedEntity;
-    private String orderBy;
-    private String groupBy;
-    private String having;
-    private ContentValues values;
+  public void setSelectedEntity(Entity selectedEntity) {
+    this.selectedEntity = selectedEntity;
+  }
 
-    public SQLQuery(String selection, Entity selectedEntity, String[] requestedColumns) {
-        this.selection = selection;
-        this.selectedEntity = selectedEntity;
-        this.requestedColumns = requestedColumns;
-    }
+  public String getOrderBy() {
+    return orderBy;
+  }
 
-    public String getSelection() {
-        return selection;
-    }
+  public void setOrderBy(String orderBy) {
+    this.orderBy = orderBy;
+  }
 
-    public void setSelection(String selection) {
-        this.selection = selection;
-    }
+  public String getGroupBy() {
+    return groupBy;
+  }
 
-    public String[] getSelectionArgs() {
-        return selectionArgs;
-    }
+  public void setGroupBy(String groupBy) {
+    this.groupBy = groupBy;
+  }
 
-    public void setSelectionArgs(String... selectionArgs) {
-        this.selectionArgs = selectionArgs;
-    }
+  public String getHaving() {
+    return having;
+  }
 
-    public Entity getSelectedEntity() {
-        return selectedEntity;
-    }
+  public void setHaving(String having) {
+    this.having = having;
+  }
 
-    public void setSelectedEntity(Entity selectedEntity) {
-        this.selectedEntity = selectedEntity;
-    }
+  public ContentValues getValues() {
+    return values;
+  }
 
-    public String getOrderBy() {
-        return orderBy;
-    }
-
-    public void setOrderBy(String orderBy) {
-        this.orderBy = orderBy;
-    }
-
-    public String getGroupBy() {
-        return groupBy;
-    }
-
-    public void setGroupBy(String groupBy) {
-        this.groupBy = groupBy;
-    }
-
-    public String getHaving() {
-        return having;
-    }
-
-    public void setHaving(String having) {
-        this.having = having;
-    }
-
-    public ContentValues getValues() {
-        return values;
-    }
-
-    public void setValues(ContentValues values) {
-        this.values = values;
-    }
+  public void setValues(ContentValues values) {
+    this.values = values;
+  }
 
   public String[] getRequestedColumns() {
     return requestedColumns;
@@ -133,52 +163,18 @@ public class SQLQuery implements Serializable {
   public void setRequestedColumns(String[] requestedColumns) {
     this.requestedColumns = requestedColumns;
   }
-    
-    
 
-    public static class Builder {
-
-        private SQLQuery query;
-
-        public Builder(String select, Entity entity, String[] requestedColumns) {
-            query = new SQLQuery(select, entity, requestedColumns);
-        }
-
-        public Builder addOrder(String order) {
-            query.setOrderBy(order);
-            return this;
-        }
-
-        public Builder addGroupBy(String group) {
-            query.setGroupBy(group);
-            return this;
-        }
-
-        public Builder addHaving(String h) {
-            query.setHaving(h);
-            return this;
-        }
-
-        public Builder addArgs(String... selectArgs) {
-            query.setSelectionArgs(selectArgs);
-            return this;
-        }
-
-        public Builder addValues(String columnName, String value) {
-            ContentValues v = query.getValues();
-            if (v == null)
-                v = new ContentValues();
-
-            v.put(columnName, value);
-            query.setValues(v);
-            return this;
-        }
-
-        public SQLQuery build() {
-            return query;
-        }
-
+  /**
+   * Added values for the update query to the SQLQuery.
+   * 
+   * @param columnName      the key - the column name
+   * @param value           the value - the new value
+   */
+  public void addValues(String columnName, String value) {
+    if (this.values == null) {
+      values = new ContentValues();
     }
 
-
+    values.put(columnName, value);
+  }
 }

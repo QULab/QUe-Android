@@ -41,11 +41,11 @@ public abstract class FavoriteMenuFragment extends Fragment {
     setHasOptionsMenu(true);
   }
 
-  abstract SQLQuery.Builder getFavoriteUpdateSQLQuery();
+  protected abstract SQLQuery getFavoriteUpdateSQLQuery();
 
-  abstract String getFavoriteColumnName();
+  protected abstract String getFavoriteColumnName();
 
-  abstract Serializable getEntity();
+  protected abstract Serializable getEntity();
 
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
@@ -85,7 +85,7 @@ public abstract class FavoriteMenuFragment extends Fragment {
   @Override
   public boolean onOptionsItemSelected(MenuItem favItem) {
     if (favItem.getItemId() == R.id.action_favorite) {
-      SQLQuery.Builder builder = getFavoriteUpdateSQLQuery();
+      SQLQuery query = getFavoriteUpdateSQLQuery();
 
       Integer fav;
       if (favItem.isChecked()) { //UNfavorited
@@ -100,8 +100,8 @@ public abstract class FavoriteMenuFragment extends Fragment {
         Toast.makeText(getActivity(), "Added item to favorites", Toast.LENGTH_SHORT).show();
       }
 
-      builder.addValues(getFavoriteColumnName(), fav.toString());
-      ConferenceDAO.updateEntity(getActivity(), builder.build());
+      query.addValues(getFavoriteColumnName(), fav.toString());
+      ConferenceDAO.updateEntity(getActivity(), query);
     }
 
     return super.onOptionsItemSelected(favItem);

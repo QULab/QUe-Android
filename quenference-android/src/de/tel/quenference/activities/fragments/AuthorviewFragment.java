@@ -35,17 +35,16 @@ import de.tel.quenference.db.entities.AuthorEntity;
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class AuthorviewFragment extends Fragment {
-  
+
   public static final String ARG_AUTHORVIEW_FRAGMENT = "author_arg";
   private static final String TAG_AUTHORVIEW = "author_tag";
-  
   private AuthorEntity author;
   private TextView name, affiliation;
-  
+
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    
+
     if (null == savedInstanceState) {
       savedInstanceState = getArguments();
     }
@@ -57,7 +56,7 @@ public class AuthorviewFragment extends Fragment {
     if (null == author) {
       author = (AuthorEntity) savedInstanceState.getSerializable(ARG_AUTHORVIEW_FRAGMENT);
     }
-    
+
   }
 
   @Override
@@ -71,23 +70,22 @@ public class AuthorviewFragment extends Fragment {
     Fragment frg = new AuthorPapersListFragment();
     Bundle args = new Bundle();
     String select = ConferenceDBContract.ConferencePaperAuthors.COLUMN_NAME_AUTHOR_ID + SQLQuery.SQL_SEARCH_EQUAL;
-    SQLQuery.Builder builder = new SQLQuery.Builder(select,
-                                                    Entity.PAPER_AUTHORS,
-                                                    ConferenceDAO.PAPER_AUTHORS_COLUMNS);
-    
-    builder.addArgs(author.getId().toString());
-    args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, builder.build());
+    SQLQuery query = new SQLQuery(select,
+                                  Entity.PAPER_AUTHORS,
+                                  ConferenceDAO.PAPER_AUTHORS_COLUMNS);
+
+    query.setSelectionArgs(author.getId().toString());
+    args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, query);
     args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_FRAGMENT, SearchTabFragmentViewPager.TabSearch.PAPER);
     frg.setArguments(args);
     FragmentManager mgr = ((FragmentActivity) getActivity()).getSupportFragmentManager();
     mgr.beginTransaction().add(R.id.author_papers, frg).commit();
-    
-    
+
+
     getActivity().setTitle(author.getFullName());
     return rootView;
   }
-  
-  
+
   @Override
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);

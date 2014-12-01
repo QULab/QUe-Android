@@ -28,7 +28,6 @@ import de.tel.quenference.db.ConferenceDBContract;
 import de.tel.quenference.db.Entity;
 import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
-import de.tel.quenference.db.dao.SQLQuery.Builder;
 import de.tel.quenference.db.entities.SessionEntity;
 import java.io.Serializable;
 
@@ -88,11 +87,12 @@ public class SessionViewFragment extends FavoriteMenuFragment {
         Fragment frg = new SessionSpeechesList();
         Bundle args = new Bundle();
         String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_SESSION + SQLQuery.SQL_SEARCH_EQUAL;
-        SQLQuery.Builder builder = new SQLQuery.Builder(select,
-                Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
+        SQLQuery query = new SQLQuery(select,
+                                      Entity.PAPER,
+                                      ConferenceDAO.PAPER_COLUMNS);
 
-        builder.addArgs(session.getId().toString());
-        args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, builder.build());
+        query.setSelectionArgs(session.getId().toString());
+        args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, query);
         args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_FRAGMENT, SearchTabFragmentViewPager.TabSearch.PAPER);
         frg.setArguments(args);
         FragmentManager mgr = ((FragmentActivity) getActivity()).getSupportFragmentManager();
@@ -116,20 +116,20 @@ public class SessionViewFragment extends FavoriteMenuFragment {
     }
 
     @Override
-    Builder getFavoriteUpdateSQLQuery() {
+    public SQLQuery getFavoriteUpdateSQLQuery() {
         String select = ConferenceDBContract.ConferenceSession.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-        SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.SESSION, ConferenceDAO.PAPER_COLUMNS);
-        builder.addArgs(session.getId().toString());
-        return builder;
+        SQLQuery query = new SQLQuery(select, Entity.SESSION, ConferenceDAO.PAPER_COLUMNS);
+        query.setSelectionArgs(session.getId().toString());
+        return query;
     }
 
     @Override
-    String getFavoriteColumnName() {
+    protected String getFavoriteColumnName() {
         return ConferenceDBContract.ConferenceSession.COLUMN_NAME_FAVORITE;
     }
 
     @Override
-    Serializable getEntity() {
+    protected Serializable getEntity() {
         return session;
     }
 }
