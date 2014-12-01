@@ -111,7 +111,7 @@ public class AgendaViewPager extends Fragment {
     public Fragment getItem(int position) {
       String day = Integer.toString(position);
       Bundle args = new Bundle();
-      args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, ConferenceDAO.getSessionDateQuery(day));
+      args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, ConferenceDAO.getSessionDateOrderQuery(day));
       args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_FRAGMENT, SearchTabFragmentViewPager.TabSearch.AGENDA);
 //            String[] conferenceDates = getResources().getStringArray(R.array.Conference_Dates);
       return SearchFragmentVP.newInstance(args);
