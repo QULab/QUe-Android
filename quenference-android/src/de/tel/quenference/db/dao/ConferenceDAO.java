@@ -87,7 +87,7 @@ public class ConferenceDAO {
   /**
    * The columns of the paper-authors relation table.
    */
-  public static final String[] paperAuthorsColumns = getColumns(ConferenceDBContract.ConferencePaperAuthors.class);
+  public static final String[] PAPER_AUTHORS_COLUMNS = getColumns(ConferenceDBContract.ConferencePaperAuthors.class);
   /**
    * The key for the authors etag which is saved in the preferences.
    */
@@ -122,6 +122,95 @@ public class ConferenceDAO {
    */
   private static final String URL_SESSIONS = PropertiesProvider.getInstance().getProperty(PropertiesProvider.SESSIONS_URL_PROP);
 
+  
+  
+    /**
+     * The selection for the author search query (where clause).
+     */
+    private static final String authorSelection =
+            ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_AFFILIATION + SQLQuery.SQL_SEARCH_LIKE + SQLQuery.SQL_OR
+                    + ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_FIRST_NAME + SQLQuery.SQL_SEARCH_LIKE + SQLQuery.SQL_OR
+                    + ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_LAST_NAME + SQLQuery.SQL_SEARCH_LIKE;
+
+    private static final String authorOrder =
+            ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_FIRST_NAME + SQLQuery.SQL_ASC_ORDER;
+    /**
+     * The selection for the paper search query (where clause).
+     */
+    private static final String paperSelection =
+            ConferenceDBContract.ConferencePaper.COLUMN_NAME_TITLE + SQLQuery.SQL_SEARCH_LIKE + SQLQuery.SQL_OR
+                    + ConferenceDBContract.ConferencePaper.COLUMN_NAME_MAIN_AUTHOR + SQLQuery.SQL_SEARCH_LIKE + SQLQuery.SQL_OR
+                    + ConferenceDBContract.ConferencePaper.COLUMN_NAME_ABSTRACT + SQLQuery.SQL_SEARCH_LIKE;
+
+    /**
+     * The selection for the session search query (where clause).
+     */
+    private static final String sessionSelection =
+            ConferenceDBContract.ConferenceSession.COLUMN_NAME_TITLE + SQLQuery.SQL_SEARCH_LIKE + SQLQuery.SQL_OR
+                    + ConferenceDBContract.ConferenceSession.COLUMN_NAME_CHAIR + SQLQuery.SQL_SEARCH_LIKE + SQLQuery.SQL_OR
+                    + ConferenceDBContract.ConferenceSession.COLUMN_NAME_CO_CHAIR + SQLQuery.SQL_SEARCH_LIKE;
+    private static final String paperSessionOrder =
+            ConferenceDBContract.ConferenceSession.COLUMN_NAME_TITLE + SQLQuery.SQL_ASC_ORDER;
+    
+    private static final String sessionDaySelection =
+            ConferenceDBContract.ConferenceSession.COLUMN_NAME_DAY + SQLQuery.SQL_SEARCH_EQUAL;
+
+    private static final String sessionDayOrderBy =
+            ConferenceDBContract.ConferenceSession.COLUMN_NAME_DATETIME + SQLQuery.SQL_ASC_ORDER;
+
+    private static final String sessionIDSelection =
+            ConferenceDBContract.ConferenceSession.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
+
+    private static final String sessionIDOrderBy =
+            ConferenceDBContract.ConferenceSession.COLUMN_NAME_ID + SQLQuery.SQL_ASC_ORDER;
+
+    public static SQLQuery getPaperQuery(String arg) {
+        arg = SQLQuery.SQL_VARIABLE_EXP + arg + SQLQuery.SQL_VARIABLE_EXP;
+        SQLQuery query = new SQLQuery(paperSelection, Entity.PAPER, PAPER_COLUMNS);
+        query.setOrderBy(paperSessionOrder);
+        query.setSelectionArgs(new String[]{arg, arg, arg});
+        System.out.println("paper query is: " + arg);
+        return query;
+    }
+
+    public static SQLQuery getAuthorQuery(String arg) {
+        arg = SQLQuery.SQL_VARIABLE_EXP + arg + SQLQuery.SQL_VARIABLE_EXP;
+        SQLQuery query = new SQLQuery(authorSelection, Entity.AUTHOR, AUTHOR_COLUMNS);
+        query.setOrderBy(authorOrder);
+        query.setSelectionArgs(new String[]{arg, arg, arg});
+
+        return query;
+    }
+
+    public static SQLQuery getSessionQuery(String arg) {
+        arg = SQLQuery.SQL_VARIABLE_EXP + arg + SQLQuery.SQL_VARIABLE_EXP;
+        SQLQuery query = new SQLQuery(sessionSelection,
+                                      Entity.SESSION,
+                                      SESSION_COLUMNS);
+        query.setOrderBy(paperSessionOrder);
+        query.setSelectionArgs(new String[]{arg, arg, arg});
+        return query;
+    }
+
+    public static SQLQuery getSessionDateQuery(String arg) {
+        SQLQuery query = new SQLQuery(sessionDaySelection,
+                                      Entity.SESSION,
+                                      SESSION_COLUMNS);
+        query.setOrderBy(sessionDayOrderBy);
+        query.setSelectionArgs(arg);
+        return query;
+    }
+
+    public static SQLQuery getSessionIDQuery(String arg) {
+        SQLQuery query = new SQLQuery(sessionIDSelection,
+                                      Entity.SESSION,
+                                      SESSION_COLUMNS);
+        query.setOrderBy(sessionIDOrderBy);
+        query.setSelectionArgs(arg);
+        return query;
+    }
+  
+  
   /**
    * Updates the database with the new values from the web service. The saved
    * etags are checked if they are equal nothing is done.
@@ -253,7 +342,7 @@ public class ConferenceDAO {
 
     if (entity.equals(Entity.PAPER_AUTHORS)) {
       values = new ArrayList<PaperAuthorsEntity>();
-      columns = paperAuthorsColumns;
+      columns = PAPER_AUTHORS_COLUMNS;
       tableName = ConferenceDBContract.ConferencePaperAuthors.TABLE_NAME;
       extract = getPaperAuthorsCursorExtractor();
     }

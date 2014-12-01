@@ -89,7 +89,7 @@ public class SessionViewFragment extends FavoriteMenuFragment {
         Bundle args = new Bundle();
         String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_SESSION + SQLQuery.SQL_SEARCH_EQUAL;
         SQLQuery.Builder builder = new SQLQuery.Builder(select,
-                Entity.PAPER);
+                Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
 
         builder.addArgs(session.getId().toString());
         args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, builder.build());
@@ -118,7 +118,7 @@ public class SessionViewFragment extends FavoriteMenuFragment {
     @Override
     Builder getFavoriteUpdateSQLQuery() {
         String select = ConferenceDBContract.ConferenceSession.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-        SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.SESSION);
+        SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.SESSION, ConferenceDAO.PAPER_COLUMNS);
         builder.addArgs(session.getId().toString());
         return builder;
     }

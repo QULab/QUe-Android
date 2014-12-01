@@ -41,7 +41,7 @@ public class AuthorPapersListFragment extends SearchFragmentVP {
   protected void search() {
     if (query == null) {
       String selection = ConferenceDBContract.ConferencePaperAuthors.COLUMN_NAME_AUTHOR_ID + SQLQuery.SQL_SEARCH_EQUAL;
-      query = new SQLQuery(selection, Entity.PAPER_AUTHORS);
+      query = new SQLQuery(selection, Entity.PAPER_AUTHORS, ConferenceDAO.PAPER_AUTHORS_COLUMNS);
       query.setSelectionArgs(new String[]{"1"});
     }
     ConferenceDAO.getSelection(getActivity(), query.getSelectedEntity(), new AsyncDBListReader.PostExecuteJob() {
@@ -56,7 +56,7 @@ public class AuthorPapersListFragment extends SearchFragmentVP {
             SQLiteDatabase db = DB_HELPER.getReadableDatabase();
             for (Object obj : result) {
               String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-              SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.PAPER);
+              SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
               builder.addArgs(((PaperAuthorsEntity) obj).getPaperID().toString());
               SQLQuery q = builder.build();
               

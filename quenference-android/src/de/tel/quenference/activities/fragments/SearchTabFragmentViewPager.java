@@ -25,6 +25,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import de.tel.quenference.activities.R;
+import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
 
 /**
@@ -110,15 +111,15 @@ public class SearchTabFragmentViewPager extends Fragment {
       Bundle args = new Bundle();
 
       if (position == 0) {
-        args.putSerializable(ARG_SEARCH_QUERY, SQLQuery.getAuthorQuery(searchValue));
+        args.putSerializable(ARG_SEARCH_QUERY, ConferenceDAO.getAuthorQuery(searchValue));
         args.putSerializable(ARG_SEARCH_FRAGMENT, TabSearch.AUTHOR);
       }
       if (position == 1) {
-        args.putSerializable(ARG_SEARCH_QUERY, SQLQuery.getPaperQuery(searchValue));
+        args.putSerializable(ARG_SEARCH_QUERY, ConferenceDAO.getPaperQuery(searchValue));
         args.putSerializable(ARG_SEARCH_FRAGMENT, TabSearch.PAPER);
       }
       if (position == 2) {
-        args.putSerializable(ARG_SEARCH_QUERY, SQLQuery.getSessionQuery(searchValue));
+        args.putSerializable(ARG_SEARCH_QUERY, ConferenceDAO.getSessionQuery(searchValue));
         args.putSerializable(ARG_SEARCH_FRAGMENT, TabSearch.SESSION);
       }
       return SearchFragmentVP.newInstance(args);

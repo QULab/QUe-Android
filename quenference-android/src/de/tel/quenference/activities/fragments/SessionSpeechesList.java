@@ -46,7 +46,7 @@ public class SessionSpeechesList extends SearchFragmentVP {
     protected void search() {
         if (query == null) {
             String selection = ConferenceDBContract.ConferencePaper.COLUMN_NAME_SESSION + SQLQuery.SQL_SEARCH_EQUAL;
-            query = new SQLQuery(selection, Entity.PAPER);
+            query = new SQLQuery(selection, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
             query.setSelectionArgs(new String[]{"1"});
         }
 

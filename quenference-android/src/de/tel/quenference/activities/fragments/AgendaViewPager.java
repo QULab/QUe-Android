@@ -26,6 +26,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import de.tel.quenference.activities.R;
+import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -110,7 +111,7 @@ public class AgendaViewPager extends Fragment {
     public Fragment getItem(int position) {
       String day = Integer.toString(position);
       Bundle args = new Bundle();
-      args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, SQLQuery.getSessionDateQuery(day));
+      args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, ConferenceDAO.getSessionDateQuery(day));
       args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_FRAGMENT, SearchTabFragmentViewPager.TabSearch.AGENDA);
 //            String[] conferenceDates = getResources().getStringArray(R.array.Conference_Dates);
       return SearchFragmentVP.newInstance(args);

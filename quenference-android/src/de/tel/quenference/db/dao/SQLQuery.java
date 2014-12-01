@@ -55,94 +55,8 @@ public class SQLQuery implements Serializable {
     public static final String SQL_VARIABLE_EXP = "%";
 
 
-    /**
-     * The selection for the author search query (where clause).
-     */
-    private static final String authorSelection =
-            ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_AFFILIATION + SQL_SEARCH_LIKE + SQL_OR
-                    + ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_FIRST_NAME + SQL_SEARCH_LIKE + SQL_OR
-                    + ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_LAST_NAME + SQL_SEARCH_LIKE;
 
-    private static final String authorOrder =
-            ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_FIRST_NAME + SQL_ASC_ORDER;
-    /**
-     * The selection for the paper search query (where clause).
-     */
-    private static final String paperSelection =
-            ConferenceDBContract.ConferencePaper.COLUMN_NAME_TITLE + SQL_SEARCH_LIKE + SQL_OR
-                    + ConferenceDBContract.ConferencePaper.COLUMN_NAME_MAIN_AUTHOR + SQL_SEARCH_LIKE + SQL_OR
-                    + ConferenceDBContract.ConferencePaper.COLUMN_NAME_ABSTRACT + SQL_SEARCH_LIKE;
-
-
-    private static final String paperIDSelection =
-            ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + SQL_SEARCH_EQUAL;
-
-    private static final String paperIDOrderBy =
-            ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + SQL_ASC_ORDER;
-
-
-    /**
-     * The selection for the session search query (where clause).
-     */
-    private static final String sessionSelection =
-            ConferenceDBContract.ConferenceSession.COLUMN_NAME_TITLE + SQL_SEARCH_LIKE + SQL_OR
-                    + ConferenceDBContract.ConferenceSession.COLUMN_NAME_CHAIR + SQL_SEARCH_LIKE + SQL_OR
-                    + ConferenceDBContract.ConferenceSession.COLUMN_NAME_CO_CHAIR + SQL_SEARCH_LIKE;
-    private static final String paperSessionOrder =
-            ConferenceDBContract.ConferenceSession.COLUMN_NAME_TITLE + SQL_ASC_ORDER;
-    
-    private static final String sessionDaySelection =
-            ConferenceDBContract.ConferenceSession.COLUMN_NAME_DAY + SQL_SEARCH_EQUAL;
-
-    private static final String sessionDayOrderBy =
-            ConferenceDBContract.ConferenceSession.COLUMN_NAME_DATETIME + SQL_ASC_ORDER;
-
-    private static final String sessionIDSelection =
-            ConferenceDBContract.ConferenceSession.COLUMN_NAME_ID + SQL_SEARCH_EQUAL;
-
-    private static final String sessionIDOrderBy =
-            ConferenceDBContract.ConferenceSession.COLUMN_NAME_ID + SQL_ASC_ORDER;
-
-    public static SQLQuery getPaperQuery(String arg) {
-        arg = SQL_VARIABLE_EXP + arg + SQL_VARIABLE_EXP;
-        SQLQuery query = new SQLQuery(paperSelection, Entity.PAPER);
-        query.setOrderBy(paperSessionOrder);
-        query.setSelectionArgs(new String[]{arg, arg, arg});
-        System.out.println("paper query is: " + arg);
-        return query;
-    }
-
-    public static SQLQuery getAuthorQuery(String arg) {
-        arg = SQL_VARIABLE_EXP + arg + SQL_VARIABLE_EXP;
-        SQLQuery query = new SQLQuery(authorSelection, Entity.AUTHOR);
-        query.setOrderBy(authorOrder);
-        query.setSelectionArgs(new String[]{arg, arg, arg});
-
-        return query;
-    }
-
-    public static SQLQuery getSessionQuery(String arg) {
-        arg = SQL_VARIABLE_EXP + arg + SQL_VARIABLE_EXP;
-        SQLQuery query = new SQLQuery(sessionSelection, Entity.SESSION);
-        query.setOrderBy(paperSessionOrder);
-        query.setSelectionArgs(new String[]{arg, arg, arg});
-        return query;
-    }
-
-    public static SQLQuery getSessionDateQuery(String arg) {
-        SQLQuery query = new SQLQuery(sessionDaySelection, Entity.SESSION);
-        query.setOrderBy(sessionDayOrderBy);
-        query.setSelectionArgs(arg);
-        return query;
-    }
-
-    public static SQLQuery getSessionIDQuery(String arg) {
-        SQLQuery query = new SQLQuery(sessionIDSelection, Entity.SESSION);
-        query.setOrderBy(sessionIDOrderBy);
-        query.setSelectionArgs(arg);
-        return query;
-    }
-
+    private String[] requestedColumns;
     private String selection;
     private String[] selectionArgs;
     private Entity selectedEntity;
@@ -151,11 +65,11 @@ public class SQLQuery implements Serializable {
     private String having;
     private ContentValues values;
 
-    public SQLQuery(String selection, Entity selectedEntity) {
+    public SQLQuery(String selection, Entity selectedEntity, String[] requestedColumns) {
         this.selection = selection;
         this.selectedEntity = selectedEntity;
+        this.requestedColumns = requestedColumns;
     }
-
 
     public String getSelection() {
         return selection;
@@ -217,8 +131,8 @@ public class SQLQuery implements Serializable {
 
         private SQLQuery query;
 
-        public Builder(String select, Entity entity) {
-            query = new SQLQuery(select, entity);
+        public Builder(String select, Entity entity, String[] requestedColumns) {
+            query = new SQLQuery(select, entity, requestedColumns);
         }
 
         public Builder addOrder(String order) {

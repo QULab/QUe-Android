@@ -26,6 +26,7 @@ import android.widget.TextView;
 import de.tel.quenference.activities.R;
 import de.tel.quenference.db.ConferenceDBContract;
 import de.tel.quenference.db.Entity;
+import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
 import de.tel.quenference.db.entities.AuthorEntity;
 
@@ -71,7 +72,8 @@ public class AuthorviewFragment extends Fragment {
     Bundle args = new Bundle();
     String select = ConferenceDBContract.ConferencePaperAuthors.COLUMN_NAME_AUTHOR_ID + SQLQuery.SQL_SEARCH_EQUAL;
     SQLQuery.Builder builder = new SQLQuery.Builder(select,
-                                                    Entity.PAPER_AUTHORS);
+                                                    Entity.PAPER_AUTHORS,
+                                                    ConferenceDAO.PAPER_AUTHORS_COLUMNS);
     
     builder.addArgs(author.getId().toString());
     args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, builder.build());

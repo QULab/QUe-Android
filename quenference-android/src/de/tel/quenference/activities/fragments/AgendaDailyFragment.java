@@ -73,7 +73,7 @@ public class AgendaDailyFragment extends ListFragment {
         String paperSessionOrder =
                 ConferenceDBContract.ConferenceSession.COLUMN_NAME_DATETIME + SQL_ASC_ORDER;
         String arg = agendaDay;//"SELECT * FROM SESSION WHERE DAY LIKE '0'";
-        SQLQuery query = new SQLQuery(sessionSelection, Entity.SESSION);
+        SQLQuery query = new SQLQuery(sessionSelection, Entity.SESSION, ConferenceDAO.SESSION_COLUMNS);
         query.setOrderBy(paperSessionOrder);
         query.setSelectionArgs(new String[]{arg});
         //System.out.println("agenda day: " + agendaDay + "SessionSelection: " + sessionSelection);
