@@ -23,7 +23,6 @@
 package de.tel.quenference.db.dao;
 
 import android.content.ContentValues;
-import de.tel.quenference.db.ConferenceDBContract;
 import de.tel.quenference.db.Entity;
 import java.io.Serializable;
 
@@ -126,6 +125,16 @@ public class SQLQuery implements Serializable {
     public void setValues(ContentValues values) {
         this.values = values;
     }
+
+  public String[] getRequestedColumns() {
+    return requestedColumns;
+  }
+
+  public void setRequestedColumns(String[] requestedColumns) {
+    this.requestedColumns = requestedColumns;
+  }
+    
+    
 
     public static class Builder {
 

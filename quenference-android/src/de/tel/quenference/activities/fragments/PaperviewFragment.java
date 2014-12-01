@@ -147,7 +147,7 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
         SQLQuery.Builder queryBuilder = new SQLQuery.Builder(selection, Entity.PAPER_AUTHORS, ConferenceDAO.PAPER_COLUMNS);
         queryBuilder.addArgs(paper.getId().toString());
         SQLQuery query = queryBuilder.build();
-        ConferenceDAO.getSelection(getActivity(), query.getSelectedEntity(),
+        ConferenceDAO.getSelection(getActivity(),
                 new AsyncDBListReader.PostExecuteJob() {
 
                     public void doJob(final List result) {
@@ -191,8 +191,7 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
                             }
                         }.execute(getActivity());
                     }
-                }, query.getSelection(), query.getSelectionArgs(), query.getGroupBy(),
-                query.getHaving(), query.getOrderBy());
+                }, query);
     }
 
     @Override

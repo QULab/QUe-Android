@@ -126,13 +126,12 @@ public class AgendaDailyFragment extends ListFragment {
      */
     protected void search(SQLQuery q) {
 
-        ConferenceDAO.getSelection(getActivity(), q.getSelectedEntity(), new AsyncDBListReader.PostExecuteJob() {
+        ConferenceDAO.getSelection(getActivity(), new AsyncDBListReader.PostExecuteJob() {
                     public void doJob(List result) {
                         ((EntityListAdapter) getListAdapter()).setResults(result);
                         ((EntityListAdapter) getListAdapter()).notifyDataSetChanged();
                     }
-                },
-                q.getSelection(), q.getSelectionArgs(), null, null, q.getOrderBy()/*ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_ID + " ASC"*/);
+                }, q);
     }
 
 

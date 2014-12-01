@@ -185,23 +185,20 @@ public class SearchFragmentVP extends ListFragment {
   protected void search() {
 
     if (query.getSelectedEntity() == Entity.SESSION) {
-
-      ConferenceDAO.getSelection(getActivity(), query.getSelectedEntity(), new AsyncDBListReader.PostExecuteJob() {
+      query.setOrderBy(ConferenceDBContract.ConferenceSession.COLUMN_NAME_DATETIME + " ASC");
+      ConferenceDAO.getSelection(getActivity(), new AsyncDBListReader.PostExecuteJob() {
         public void doJob(List result) {
           ((EntityListAdapter) getListAdapter()).setResults(result);
           ((EntityListAdapter) getListAdapter()).notifyDataSetChanged();
         }
-      }, query.getSelection(), query.getSelectionArgs(), null, null,
-              ConferenceDBContract.ConferenceSession.COLUMN_NAME_DATETIME + " ASC");
-      //quick workaround, due to conference sessions not being in order suddenly.
-
+      }, query);
     } else {
-      ConferenceDAO.getSelection(getActivity(), query.getSelectedEntity(), new AsyncDBListReader.PostExecuteJob() {
+      ConferenceDAO.getSelection(getActivity(), new AsyncDBListReader.PostExecuteJob() {
         public void doJob(List result) {
           ((EntityListAdapter) getListAdapter()).setResults(result);
           ((EntityListAdapter) getListAdapter()).notifyDataSetChanged();
         }
-      }, query.getSelection(), query.getSelectionArgs(), null, null, query.getOrderBy()/*ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_ID + " ASC"*/);
+      }, query);
     }
   }
 

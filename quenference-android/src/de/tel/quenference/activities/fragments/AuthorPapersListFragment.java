@@ -44,7 +44,7 @@ public class AuthorPapersListFragment extends SearchFragmentVP {
       query = new SQLQuery(selection, Entity.PAPER_AUTHORS, ConferenceDAO.PAPER_AUTHORS_COLUMNS);
       query.setSelectionArgs(new String[]{"1"});
     }
-    ConferenceDAO.getSelection(getActivity(), query.getSelectedEntity(), new AsyncDBListReader.PostExecuteJob() {
+    ConferenceDAO.getSelection(getActivity(), new AsyncDBListReader.PostExecuteJob() {
 
       public void doJob(final List result) {
         new AsyncTask<Context, Void,  List<PaperEntity>>() {
@@ -85,7 +85,7 @@ public class AuthorPapersListFragment extends SearchFragmentVP {
         }.execute(getActivity());
 
       }
-    }, query.getSelection(), query.getSelectionArgs(), null, null, query.getOrderBy()/*ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_ID + " ASC"*/);
+    }, query);
     
   }
   

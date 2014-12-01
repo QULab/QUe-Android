@@ -279,77 +279,39 @@ public class ConferenceDAO {
     DB_HELPER.close();
   }
 
-  
-
-  /**
-   * Executes the SQL Query which returns for the given entity the hole table
-   * with all values. The return value is processed in the post job.
-   *
-   * @param context the application context which is used
-   * @param entity the entity which represents the requested table
-   * @param postJob the job which will be executed after the query
-   */
-  public static void getList(Context context, Entity entity, AsyncDBListReader.PostExecuteJob postJob) {
-    getSelection(context, entity, postJob, null, null, null, null, null);
-  }
-
   /**
    * Executes the SQL query for the entity on the corresponding table. The
    * return value is processed in the post job.
    *
    * @param context the application context which is used
-   * @param entity the entity which represents the requested table
    * @param postJob the job which will be executed after the query
-   * @param selection the selection of the SQL query - where clause
-   * @param selectionArgs the arguments for the selection
-   * @param groupBy the group by clause of the SQL query
-   * @param having the having clause of the SQL query
-   * @param orderBy the order by clause of the SQL query
+   * @param query   the sql query which contains the information for the request
    */
-  public static void getSelection(Context context, Entity entity, AsyncDBListReader.PostExecuteJob postJob,
-          String selection, String[] selectionArgs, String groupBy, String having,
-          String orderBy) {
+  public static void getSelection(Context context, AsyncDBListReader.PostExecuteJob postJob,
+                                  SQLQuery query) {
 
-    if (context == null || entity == null) {
+    if (context == null || query == null) {
       throw new IllegalArgumentException();
     }
 
     List values = null;
-    String[] columns = null;
-    String tableName = null;
     CursorExtracting extract = null;
 
-    if (entity.equals(Entity.AUTHOR)) {
+    if (query.getSelectedEntity().equals(Entity.AUTHOR)) {
       values = new ArrayList<AuthorEntity>();
-      columns = AUTHOR_COLUMNS;
-      tableName = ConferenceDBContract.ConferenceAuthor.TABLE_NAME;
       extract = getAuthorCursorExtractor();
-    }
-
-    if (entity.equals(Entity.PAPER)) {
+    } else if (query.getSelectedEntity().equals(Entity.PAPER)) {
       values = new ArrayList<PaperEntity>();
-      columns = PAPER_COLUMNS;
-      tableName = ConferenceDBContract.ConferencePaper.TABLE_NAME;
       extract = getPaperCursorExtractor();
-    }
-
-    if (entity.equals(Entity.SESSION)) {
+    } else if (query.getSelectedEntity().equals(Entity.SESSION)) {
       values = new ArrayList<SessionEntity>();
-      columns = SESSION_COLUMNS;
-      tableName = ConferenceDBContract.ConferenceSession.TABLE_NAME;
       extract = getSessionCursorExtractor();
-    }
-
-    if (entity.equals(Entity.PAPER_AUTHORS)) {
+    } else if (query.getSelectedEntity().equals(Entity.PAPER_AUTHORS)) {
       values = new ArrayList<PaperAuthorsEntity>();
-      columns = PAPER_AUTHORS_COLUMNS;
-      tableName = ConferenceDBContract.ConferencePaperAuthors.TABLE_NAME;
       extract = getPaperAuthorsCursorExtractor();
     }
-    AsyncDBListReader listReader = new AsyncDBListReader(values, columns, tableName,
-            extract, postJob, selection,
-            selectionArgs, groupBy, having,
-            orderBy);
+    AsyncDBListReader listReader = new AsyncDBListReader(values, query,
+                                                         extract, postJob);
     listReader.execute(context);
   }
 

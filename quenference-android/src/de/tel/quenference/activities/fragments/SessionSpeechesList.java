@@ -36,6 +36,7 @@ import java.util.List;
 public class SessionSpeechesList extends SearchFragmentVP {
 
 
+  @Override
     public ListAdapter getListAdapter(TabSearch searchfrg) {
         //Log.d(SessionSpeechesList.class.getName(), "GETLIST ADAPTER!!!!");
         return new SessionSpeechesListAdapter(getActivity());
@@ -50,13 +51,13 @@ public class SessionSpeechesList extends SearchFragmentVP {
             query.setSelectionArgs(new String[]{"1"});
         }
 
-        ConferenceDAO.getSelection(getActivity(), query.getSelectedEntity(), new AsyncDBListReader.PostExecuteJob() {
+        ConferenceDAO.getSelection(getActivity(), new AsyncDBListReader.PostExecuteJob() {
 
             public void doJob(final List result) {
                 ((SessionSpeechesListAdapter) getListAdapter()).setSpeeches(result);
                 ((SessionSpeechesListAdapter) getListAdapter()).notifyDataSetChanged();
             }
-        }, query.getSelection(), query.getSelectionArgs(), null, null, query.getOrderBy());
+        }, query);
     }
 
     @Override
