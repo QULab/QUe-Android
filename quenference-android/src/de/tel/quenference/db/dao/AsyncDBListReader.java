@@ -37,11 +37,6 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
   private List values;
   
   /**
-   * The columns which are requested in the SQL query.
-   */
-  private String[] columns;
-  
-  /**
    * The extractor which will be used to extract the values from the result set.
    */
   private CursorExtracting extract;
@@ -75,7 +70,7 @@ public class AsyncDBListReader extends AsyncTask<Context, Void, List> {
 
   @Override
   protected List doInBackground(Context... context) {
-    if (columns == null || extract == null || query == null
+    if (extract == null || query == null
             || context == null || context.length == 0) {
       throw new IllegalStateException();
     }
