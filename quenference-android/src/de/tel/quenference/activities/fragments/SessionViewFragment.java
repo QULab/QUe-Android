@@ -25,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import de.tel.quenference.activities.R;
 import de.tel.quenference.db.ConferenceDBContract;
+import de.tel.quenference.db.Entity;
 import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
 import de.tel.quenference.db.dao.SQLQuery.Builder;
@@ -88,7 +89,7 @@ public class SessionViewFragment extends FavoriteMenuFragment {
         Bundle args = new Bundle();
         String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_SESSION + SQLQuery.SQL_SEARCH_EQUAL;
         SQLQuery.Builder builder = new SQLQuery.Builder(select,
-                ConferenceDAO.Entity.PAPER);
+                Entity.PAPER);
 
         builder.addArgs(session.getId().toString());
         args.putSerializable(SearchTabFragmentViewPager.ARG_SEARCH_QUERY, builder.build());
@@ -117,7 +118,7 @@ public class SessionViewFragment extends FavoriteMenuFragment {
     @Override
     Builder getFavoriteUpdateSQLQuery() {
         String select = ConferenceDBContract.ConferenceSession.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-        SQLQuery.Builder builder = new SQLQuery.Builder(select, ConferenceDAO.Entity.SESSION);
+        SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.SESSION);
         builder.addArgs(session.getId().toString());
         return builder;
     }

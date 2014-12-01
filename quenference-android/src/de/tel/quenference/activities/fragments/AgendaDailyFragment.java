@@ -23,6 +23,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import de.tel.quenference.activities.R;
 import de.tel.quenference.db.ConferenceDBContract;
+import de.tel.quenference.db.Entity;
 import de.tel.quenference.db.dao.AsyncDBListReader;
 import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
@@ -72,7 +73,7 @@ public class AgendaDailyFragment extends ListFragment {
         String paperSessionOrder =
                 ConferenceDBContract.ConferenceSession.COLUMN_NAME_DATETIME + SQL_ASC_ORDER;
         String arg = agendaDay;//"SELECT * FROM SESSION WHERE DAY LIKE '0'";
-        SQLQuery query = new SQLQuery(sessionSelection, ConferenceDAO.Entity.SESSION);
+        SQLQuery query = new SQLQuery(sessionSelection, Entity.SESSION);
         query.setOrderBy(paperSessionOrder);
         query.setSelectionArgs(new String[]{arg});
         //System.out.println("agenda day: " + agendaDay + "SessionSelection: " + sessionSelection);

@@ -24,6 +24,7 @@ import de.tel.quenference.async.AsyncGETRequester;
 import de.tel.quenference.async.GetRequestInfo;
 import de.tel.quenference.db.ConferenceDBContract;
 import de.tel.quenference.db.ConferenceDBHelper;
+import de.tel.quenference.db.Entity;
 import de.tel.quenference.db.dao.extractor.AuthorExtractor;
 import de.tel.quenference.db.dao.extractor.PaperAuthorsExtractor;
 import de.tel.quenference.db.dao.extractor.PaperExtractor;
@@ -189,14 +190,7 @@ public class ConferenceDAO {
     DB_HELPER.close();
   }
 
-  /**
-   * The Entity enum represents the entities or also named tables from the
-   * database.
-   */
-  public enum Entity {
-
-    SESSION, AUTHOR, PAPER, PAPER_AUTHORS
-  }
+  
 
   /**
    * Executes the SQL Query which returns for the given entity the hole table
@@ -386,9 +380,6 @@ public class ConferenceDAO {
             PAPER_COLUMNS, ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + " = " + id,
             null, null, null, null);
     if (c.moveToFirst()) {
-      //create the PaperEntity from the cursor data
-      //beware: the paper abstract is read at cursor position 9, but paper requires it at cursor position 3...
-
       entity = (PaperEntity) getPaperCursorExtractor().extract(c);
     }
     c.close();

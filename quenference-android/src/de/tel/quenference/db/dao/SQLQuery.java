@@ -24,7 +24,7 @@ package de.tel.quenference.db.dao;
 
 import android.content.ContentValues;
 import de.tel.quenference.db.ConferenceDBContract;
-import de.tel.quenference.db.dao.ConferenceDAO.Entity;
+import de.tel.quenference.db.Entity;
 import java.io.Serializable;
 
 /**
@@ -105,7 +105,7 @@ public class SQLQuery implements Serializable {
 
     public static SQLQuery getPaperQuery(String arg) {
         arg = SQL_VARIABLE_EXP + arg + SQL_VARIABLE_EXP;
-        SQLQuery query = new SQLQuery(paperSelection, ConferenceDAO.Entity.PAPER);
+        SQLQuery query = new SQLQuery(paperSelection, Entity.PAPER);
         query.setOrderBy(paperSessionOrder);
         query.setSelectionArgs(new String[]{arg, arg, arg});
         System.out.println("paper query is: " + arg);
@@ -114,7 +114,7 @@ public class SQLQuery implements Serializable {
 
     public static SQLQuery getAuthorQuery(String arg) {
         arg = SQL_VARIABLE_EXP + arg + SQL_VARIABLE_EXP;
-        SQLQuery query = new SQLQuery(authorSelection, ConferenceDAO.Entity.AUTHOR);
+        SQLQuery query = new SQLQuery(authorSelection, Entity.AUTHOR);
         query.setOrderBy(authorOrder);
         query.setSelectionArgs(new String[]{arg, arg, arg});
 
@@ -123,7 +123,7 @@ public class SQLQuery implements Serializable {
 
     public static SQLQuery getSessionQuery(String arg) {
         arg = SQL_VARIABLE_EXP + arg + SQL_VARIABLE_EXP;
-        SQLQuery query = new SQLQuery(sessionSelection, ConferenceDAO.Entity.SESSION);
+        SQLQuery query = new SQLQuery(sessionSelection, Entity.SESSION);
         query.setOrderBy(paperSessionOrder);
         query.setSelectionArgs(new String[]{arg, arg, arg});
         return query;
@@ -145,7 +145,7 @@ public class SQLQuery implements Serializable {
 
     private String selection;
     private String[] selectionArgs;
-    private ConferenceDAO.Entity selectedEntity;
+    private Entity selectedEntity;
     private String orderBy;
     private String groupBy;
     private String having;
@@ -173,11 +173,11 @@ public class SQLQuery implements Serializable {
         this.selectionArgs = selectionArgs;
     }
 
-    public ConferenceDAO.Entity getSelectedEntity() {
+    public Entity getSelectedEntity() {
         return selectedEntity;
     }
 
-    public void setSelectedEntity(ConferenceDAO.Entity selectedEntity) {
+    public void setSelectedEntity(Entity selectedEntity) {
         this.selectedEntity = selectedEntity;
     }
 
@@ -217,7 +217,7 @@ public class SQLQuery implements Serializable {
 
         private SQLQuery query;
 
-        public Builder(String select, ConferenceDAO.Entity entity) {
+        public Builder(String select, Entity entity) {
             query = new SQLQuery(select, entity);
         }
 

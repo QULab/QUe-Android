@@ -24,6 +24,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import de.tel.quenference.activities.R;
 import de.tel.quenference.db.ConferenceDBContract;
+import de.tel.quenference.db.Entity;
 import de.tel.quenference.db.dao.AsyncDBListReader;
 import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
@@ -183,7 +184,7 @@ public class SearchFragmentVP extends ListFragment {
    */
   protected void search() {
 
-    if (query.getSelectedEntity() == ConferenceDAO.Entity.SESSION) {
+    if (query.getSelectedEntity() == Entity.SESSION) {
 
       ConferenceDAO.getSelection(getActivity(), query.getSelectedEntity(), new AsyncDBListReader.PostExecuteJob() {
         public void doJob(List result) {

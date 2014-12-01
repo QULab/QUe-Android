@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import de.tel.quenference.db.ConferenceDBContract;
 import de.tel.quenference.db.ConferenceDBHelper;
+import de.tel.quenference.db.Entity;
 import de.tel.quenference.db.dao.AsyncDBListReader;
 import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
@@ -40,7 +41,7 @@ public class AuthorPapersListFragment extends SearchFragmentVP {
   protected void search() {
     if (query == null) {
       String selection = ConferenceDBContract.ConferencePaperAuthors.COLUMN_NAME_AUTHOR_ID + SQLQuery.SQL_SEARCH_EQUAL;
-      query = new SQLQuery(selection, ConferenceDAO.Entity.PAPER_AUTHORS);
+      query = new SQLQuery(selection, Entity.PAPER_AUTHORS);
       query.setSelectionArgs(new String[]{"1"});
     }
     ConferenceDAO.getSelection(getActivity(), query.getSelectedEntity(), new AsyncDBListReader.PostExecuteJob() {
@@ -55,7 +56,7 @@ public class AuthorPapersListFragment extends SearchFragmentVP {
             SQLiteDatabase db = DB_HELPER.getReadableDatabase();
             for (Object obj : result) {
               String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-              SQLQuery.Builder builder = new SQLQuery.Builder(select, ConferenceDAO.Entity.PAPER);
+              SQLQuery.Builder builder = new SQLQuery.Builder(select, Entity.PAPER);
               builder.addArgs(((PaperAuthorsEntity) obj).getPaperID().toString());
               SQLQuery q = builder.build();
               

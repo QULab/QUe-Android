@@ -23,6 +23,7 @@ import android.widget.ListAdapter;
 import android.widget.ListView;
 import de.tel.quenference.activities.fragments.SearchTabFragmentViewPager.TabSearch;
 import de.tel.quenference.db.ConferenceDBContract;
+import de.tel.quenference.db.Entity;
 import de.tel.quenference.db.dao.AsyncDBListReader;
 import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
@@ -45,7 +46,7 @@ public class SessionSpeechesList extends SearchFragmentVP {
     protected void search() {
         if (query == null) {
             String selection = ConferenceDBContract.ConferencePaper.COLUMN_NAME_SESSION + SQLQuery.SQL_SEARCH_EQUAL;
-            query = new SQLQuery(selection, ConferenceDAO.Entity.PAPER);
+            query = new SQLQuery(selection, Entity.PAPER);
             query.setSelectionArgs(new String[]{"1"});
         }
 
