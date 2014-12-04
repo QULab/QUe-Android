@@ -38,43 +38,45 @@ public class AsyncConferenceDBUpdater extends AsyncTask<JSONObject, Void, Boolea
    * The error message if the json extraction failed.
    */
   private static final String ERROR_MSG_JSON_EXTRACT = "JSON EXTRACT FAILED!";
-  
   /**
    * The error message if the insertion failed.
    */
   private static final String ERROR_MSG_INSERT_FAILED = "Insert failed, try update...";
   
   /**
+   * The complete message indicates that the update was completed.
+   */
+  private static final String COMPLETE_MSG_UPDATE_DB = "Database update completed";
+  /**
    * The id to identify the values.
    */
   private static final String VALUES_ID = "id";
-  
   /**
    * The json key of the meta data.
    */
   private static final String UNUSED_JSON_META = "meta";
-  
   /**
-   * The database helper of the application which is used to update the database.
+   * The database helper of the application which is used to update the
+   * database.
    */
   private ConferenceDBHelper dBHelper;
 
   /**
    * The ctor to create the asynchronous database updater.
-   * 
-   * @param dbHelper        the database helper which is used for the update
+   *
+   * @param dbHelper the database helper which is used for the update
    */
   public AsyncConferenceDBUpdater(ConferenceDBHelper dbHelper) {
     this.dBHelper = dbHelper;
   }
 
   /**
-   * The processing to extract the session for the given json.
-   * The ContentValues object contains for each column of the session table
-   * the corresponding value from the json.
-   * 
-   * @param json      the json which contains the session
-   * @return          the extracted session in a ContentValues object
+   * The processing to extract the session for the given json. The ContentValues
+   * object contains for each column of the session table the corresponding
+   * value from the json.
+   *
+   * @param json the json which contains the session
+   * @return the extracted session in a ContentValues object
    */
   private ContentValues extractSession(JSONObject json) {
     ContentValues values = new ContentValues();
@@ -108,12 +110,12 @@ public class AsyncConferenceDBUpdater extends AsyncTask<JSONObject, Void, Boolea
   }
 
   /**
-   * The processing to extract the paper for the given json.
-   * The ContentValues object contains for each column of the paper table
-   * the corresponding value from the json.
-   * 
-   * @param json      the json which contains the paper
-   * @return          the extracted paper in a ContentValues object
+   * The processing to extract the paper for the given json. The ContentValues
+   * object contains for each column of the paper table the corresponding value
+   * from the json.
+   *
+   * @param json the json which contains the paper
+   * @return the extracted paper in a ContentValues object
    */
   private ContentValues extractPaper(JSONObject json) {
     ContentValues values = new ContentValues();
@@ -160,12 +162,12 @@ public class AsyncConferenceDBUpdater extends AsyncTask<JSONObject, Void, Boolea
   }
 
   /**
-   * The processing to extract the author for the given json.
-   * The ContentValues object contains for each column of the author table
-   * the corresponding value from the json.
-   * 
-   * @param json      the json which contains the author
-   * @return          the extracted author in a ContentValues object
+   * The processing to extract the author for the given json. The ContentValues
+   * object contains for each column of the author table the corresponding value
+   * from the json.
+   *
+   * @param json the json which contains the author
+   * @return the extracted author in a ContentValues object
    */
   private ContentValues extractAuthor(JSONObject json) {
     ContentValues values = new ContentValues();
@@ -183,16 +185,16 @@ public class AsyncConferenceDBUpdater extends AsyncTask<JSONObject, Void, Boolea
     }
     return values;
   }
-  
+
   /**
-   * The processing to extract and save the paper authors for the given json and paper.
-   * For each author in the json the paper and author are saved in the 
+   * The processing to extract and save the paper authors for the given json and
+   * paper. For each author in the json the paper and author are saved in the
    * relation paper-authors table.
-   * 
-   * @param db        the database object which will be used to save the entries
-   * @param json      the json which contains the author
-   * @param paper     the paper for which the authors are saved
-   * @return          the paper and his main author
+   *
+   * @param db the database object which will be used to save the entries
+   * @param json the json which contains the author
+   * @param paper the paper for which the authors are saved
+   * @return the paper and his main author
    */
   private ContentValues savedPaperAuthors(SQLiteDatabase db, JSONObject json, ContentValues paper) {
     Iterator it = json.keys();
@@ -242,13 +244,15 @@ public class AsyncConferenceDBUpdater extends AsyncTask<JSONObject, Void, Boolea
 
   @Override
   protected Boolean doInBackground(JSONObject... args) {
-    if (args.length > 0) {
+    if (args != null && args.length > 0) {
       JSONObject json = args[0];
-      SQLiteDatabase db = dBHelper.getWritableDatabase();
+      if (json == null) {
+        return false;
+      }
       Iterator iterator = json.keys();
       String arrayKey = "";
       JSONArray responseValues = null;
-      if (iterator.hasNext()) {
+      if (iterator != null && iterator.hasNext()) {
         try {
           arrayKey = (String) iterator.next();
           if (arrayKey.equalsIgnoreCase(UNUSED_JSON_META)) {
@@ -260,43 +264,49 @@ public class AsyncConferenceDBUpdater extends AsyncTask<JSONObject, Void, Boolea
           if (!arrayKey.equalsIgnoreCase(UNUSED_JSON_META)) {
             responseValues = json.getJSONArray(arrayKey);
           }
-
-          if (responseValues != null) {
-            for (int i = 0; i < responseValues.length(); i++) {
-              ContentValues values = new ContentValues();
-              String table = "";
-              if (arrayKey.equalsIgnoreCase(ConferenceDBContract.ConferenceAuthor.TABLE_NAME + "s")) {
-                values = extractAuthor(responseValues.getJSONObject(i));
-                table = ConferenceDBContract.ConferenceAuthor.TABLE_NAME;
-              }
-              if (arrayKey.equalsIgnoreCase(ConferenceDBContract.ConferencePaper.TABLE_NAME + "s")) {
-                values = extractPaper(responseValues.getJSONObject(i));
-                table = ConferenceDBContract.ConferencePaper.TABLE_NAME;
-                values = savedPaperAuthors(db, responseValues.getJSONObject(i), values);
-              }
-              if (arrayKey.equalsIgnoreCase(ConferenceDBContract.ConferenceSession.TABLE_NAME + "s")) {
-                values = extractSession(responseValues.getJSONObject(i));
-                table = ConferenceDBContract.ConferenceSession.TABLE_NAME;
-              }
-              if (values != null && values.size() > 0 && !table.isEmpty()) {
-                try {
-                  db.insertOrThrow(table, null, values);
-                } catch (SQLException sqlEx) {
-                  Log.d(AsyncConferenceDBUpdater.class.getName(), ERROR_MSG_INSERT_FAILED);
-                  db.update(table, values, VALUES_ID + " = ?", new String[]{values.get(VALUES_ID).toString()});
-                }
-              }
-            }
-          }
+          updateValues(arrayKey, responseValues);
         } catch (JSONException ex) {
           Log.e(ConferenceDAO.class.getName(), ERROR_MSG_JSON_EXTRACT, ex);
         }
       }
-      Log.d(AsyncConferenceDBUpdater.class.getName(), "Database update completed");
-      db.close();
+      Log.d(AsyncConferenceDBUpdater.class.getName(),COMPLETE_MSG_UPDATE_DB);
       return true;
     } else {
       return false;
+    }
+  }
+
+  private void updateValues(String arrayKey, JSONArray responseValues) throws JSONException {
+    if (responseValues != null) {
+      SQLiteDatabase db = dBHelper.getWritableDatabase();
+      for (int i = 0; i < responseValues.length(); i++) {
+        ContentValues values = new ContentValues();
+        String table = "";
+        if (arrayKey.equalsIgnoreCase(ConferenceDBContract.ConferenceAuthor.TABLE_NAME + "s")) {
+          values = extractAuthor(responseValues.getJSONObject(i));
+          table = ConferenceDBContract.ConferenceAuthor.TABLE_NAME;
+        }
+        if (arrayKey.equalsIgnoreCase(ConferenceDBContract.ConferencePaper.TABLE_NAME + "s")) {
+          values = extractPaper(responseValues.getJSONObject(i));
+          table = ConferenceDBContract.ConferencePaper.TABLE_NAME;
+          values = savedPaperAuthors(db, responseValues.getJSONObject(i), values);
+        }
+        if (arrayKey.equalsIgnoreCase(ConferenceDBContract.ConferenceSession.TABLE_NAME + "s")) {
+          values = extractSession(responseValues.getJSONObject(i));
+          table = ConferenceDBContract.ConferenceSession.TABLE_NAME;
+        }
+        if (values != null && values.size() > 0 && !table.isEmpty()) {
+          try {
+            db.insertOrThrow(table, null, values);
+          } catch (SQLException sqlEx) {
+            Log.d(AsyncConferenceDBUpdater.class.getName(), ERROR_MSG_INSERT_FAILED, sqlEx);
+            db.update(table, values,
+                      VALUES_ID + SQLQuery.SQL_SEARCH_EQUAL,
+                      new String[]{values.get(VALUES_ID).toString()});
+          }
+        }
+      }
+      db.close();
     }
   }
 }
