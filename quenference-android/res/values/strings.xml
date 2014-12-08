@@ -39,7 +39,7 @@
     <string name="splash_descr">The splash screen.</string>
     
     <!--WELCOME SCREEN-->
-    <string name="welcome_text">Welcome to the Queneference application.</string>
+    <string name="welcome_text">Welcome to the QUe application.</string>
     <string name="welcome_intro">Short Introduction</string>
     <string name="welcome_intro_fav">Favorite sessions and papers and even add them to your personal calendar.</string>
     <string name="welcome_intro_search">Search sessions, papers and authors using the built-in search.</string>
