@@ -12,24 +12,7 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * Contains the entity classes which represents a row of the existing tables.
  */
 package de.tel.quenference.db.entities;
-
-import java.io.Serializable;
-
-/**
- * Represents the base entity, which contains the primary key (id) for 
- * a row of a specific table.
- * 
- * @author Christopher Zell <zelldon91@googlemail.com>
- */
-public abstract class BaseEntity implements Serializable {
-  
-  /**
-   * Returns the identifier also called primary key of the entity.
-   * 
-   * @return      the primary key
-   */
-  public abstract Integer getId();
-  
-}

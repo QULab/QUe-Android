@@ -16,6 +16,8 @@
 package de.tel.quenference.db.entities;
 
 /**
+ * Represents the author entity, which contains the values for 
+ * a row of the author table.
  *
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
