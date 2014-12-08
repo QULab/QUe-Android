@@ -57,7 +57,7 @@ public class AgendaDailyFragment extends ListFragment {
     protected String agendaDay;
 
     public ListAdapter getListAdapter(String agendaDay) {
-        return new EntityListAdapter(new ArrayList(), agendaDay, this.getActivity());
+        return new EntityListAdapter(new ArrayList(), SearchTabFragmentViewPager.TabSearch.AGENDA, this.getActivity());
     }
 
     @Override

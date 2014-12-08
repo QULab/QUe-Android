@@ -149,4 +149,7 @@
     <string name="alert_paper_password_url">
         http://conference1.service.tu-berlin.de/v1/conferences/6/register/attendee
     </string>
+    
+    <!--AGENDA CALENDAR VIEW-->
+    <string name="and">&#160;and&#160;</string>
 </resources>
