@@ -20,11 +20,19 @@ import de.tel.quenference.db.dao.CursorExtracting;
 import de.tel.quenference.db.entities.PaperEntity;
 
 /**
+ * The implementation of the CursorExtracting interface, to extract from the
+ * database cursor the paper authors entity.
  *
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class PaperExtractor implements CursorExtracting {
 
+  /**
+   * The extract method which will be used to extract the values.
+   *
+   * @param c the cursor which contains the values
+   * @return the extracted object
+   */
   public Object extract(Cursor c) {
     return new PaperEntity(c.getString(0), c.getString(1), c.getString(2),
                            c.getInt(3), c.getInt(4), c.getString(5), 

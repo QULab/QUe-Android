@@ -12,29 +12,11 @@
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
+ * 
+ * The package contains the cursor extractors for the corresponding 
+ * database entities.
+ * 
+ * @see CursorExtactor
+ * @see de.tel.quenference.db.entities
  */
 package de.tel.quenference.db.dao.extractor;
-
-import android.database.Cursor;
-import de.tel.quenference.db.dao.CursorExtracting;
-import de.tel.quenference.db.entities.AuthorEntity;
-
-/**
- * The implementation of the CursorExtracting interface, to extract from the
- * database cursor the author entity.
- *
- * @author Christopher Zell <zelldon91@googlemail.com>
- */
-public class AuthorExtractor implements CursorExtracting {
-
-  /**
-   * The extract method which will be used to extract the values.
-   *
-   * @param c the cursor which contains the values
-   * @return the extracted object
-   */
-  public Object extract(Cursor c) {
-    return new AuthorEntity(c.getString(0), c.getString(1),
-            c.getInt(2), c.getString(3));
-  }
-}
