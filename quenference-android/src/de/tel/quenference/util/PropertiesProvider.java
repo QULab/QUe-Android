@@ -31,6 +31,9 @@ import java.util.logging.Logger;
  */
 public class PropertiesProvider {
   
+  /**
+   * The name of the property file.
+   */
   public static final String PROPERTY_FILE = "quenference.properties";
   
   /**
