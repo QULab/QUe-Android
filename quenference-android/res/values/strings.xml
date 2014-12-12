@@ -156,4 +156,5 @@
     <!--CALENDAR DIALOGS-->
     <string name="alert_pick_calendar">Please pick the calendar</string>
     <string name="toast_added_to_calendar">Item added to calendar and favorites</string>
+    <string name="checkbox_remember">Remember my choice</string>
 </resources>
