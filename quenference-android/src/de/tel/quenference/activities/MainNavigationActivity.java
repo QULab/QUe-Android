@@ -113,7 +113,7 @@ public class MainNavigationActivity extends FragmentActivity {
     };
     mDrawerLayout.setDrawerListener(mDrawerToggle);
     ((DrawerItemClickListener) mDrawerList.getOnItemClickListener()).selectItem(0);
-    PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
+    //PreferenceManager.setDefaultValues(this, R.xml.preferences, false);
   }
 
   @Override
