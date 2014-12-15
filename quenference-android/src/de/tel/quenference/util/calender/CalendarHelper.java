@@ -28,6 +28,7 @@ import android.widget.Toast;
 import de.tel.quenference.activities.R;
 import de.tel.quenference.db.dao.ConferenceDAO;
 import de.tel.quenference.db.dao.SQLQuery;
+import de.tel.quenference.db.entities.BaseEntity;
 import de.tel.quenference.db.entities.PaperEntity;
 import de.tel.quenference.db.entities.SessionEntity;
 import java.io.Serializable;
@@ -211,139 +212,88 @@ public class CalendarHelper {
   }
   // for Sessions
 
-  public static void insertItemToCalendar(int CalendarID, Serializable entity, Context context) {
-    // Construct event details
-    SessionEntity session = new SessionEntity();
-    PaperEntity paper = new PaperEntity();
-    String givenDateString = new String();
-    SimpleDateFormat sdf_start = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sszzz");
-    SimpleDateFormat sdf_end = new SimpleDateFormat("mm");
-    long startMillis = 0;
-    long durationMillis = 0;
-    long endMillis = 0;
-    int sessionID;
-    SessionEntity sessionEntity = null;
-
-    if (entity instanceof SessionEntity) {
-      session = (SessionEntity) entity;
-      try {
-        givenDateString = session.getDatetime();
-        Date mDate = sdf_start.parse(givenDateString);
-        startMillis = mDate.getTime() - 21600000; //FIXME Removed 6 hrs due to Singapore Time. Delete on next conference
-        System.out.println("Date in milli :: " + startMillis);
-        durationMillis = session.getLength() * 60 * 1000;
-        endMillis = durationMillis + startMillis;
-        System.out.println("Date in milli :: " + endMillis);
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-
-    } else {
-      paper = (PaperEntity) entity;
-      try {
-        sessionID = paper.getSession();
-        sessionEntity = ConferenceDAO.getSessionByID(Integer.toString(sessionID), context);
-        givenDateString = paper.getDateTime();
-        Date mDate = sdf_start.parse(givenDateString);
-        startMillis = mDate.getTime() - 21600000; //FIXME Removed 6 hrs due to Singapore Time. Delete on next conference
-        System.out.println("Date in milli :: " + startMillis);
-        endMillis = sdf_start.parse(paper.getDateTimeEnd()).getTime() - 21600000; //FIXME Removed 6 hrs due to Singapore Time. Delete on next conference;
-        System.out.println("Date in milli :: " + endMillis);
-      } catch (ParseException e) {
-        e.printStackTrace();
-      }
-    }
-
-
-// Insert Event and respect the timezone the user is in right now.
-    ContentResolver cr = context.getContentResolver();
-    ContentValues values = new ContentValues();
-    TimeZone timeZone = TimeZone.getDefault();
-
-    if (entity instanceof SessionEntity) {
-      values.put(CalendarContract.Events.DTSTART, startMillis);
-      values.put(CalendarContract.Events.DTEND, endMillis);
-      values.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID());
-      values.put(CalendarContract.Events.TITLE, session.getTitle());
-      values.put(CalendarContract.Events.DESCRIPTION, context.getString(R.string.calendarEventDescription) + "sessionID" + session.getId());
-      values.put(CalendarContract.Events.CALENDAR_ID, CalendarID);
-      values.put(CalendarContract.Events.EVENT_LOCATION, session.getRoom());
-
-    } else {
-      if (sessionEntity != null) {
-        values.put(CalendarContract.Events.EVENT_LOCATION, sessionEntity.getRoom());
-      }
-      values.put(CalendarContract.Events.DTSTART, startMillis);
-      values.put(CalendarContract.Events.DTEND, endMillis);
-      values.put(CalendarContract.Events.EVENT_TIMEZONE, timeZone.getID());
-      values.put(CalendarContract.Events.TITLE, paper.getTitle());
-      values.put(CalendarContract.Events.DESCRIPTION, context.getString(R.string.calendarEventDescription) + "paperID" + paper.getId());
-      values.put(CalendarContract.Events.CALENDAR_ID, CalendarID);
-    }
-    Uri uri = cr.insert(CalendarContract.Events.CONTENT_URI, values);
-
-// Retrieve ID for new event
-    String eventID = uri.toString();//.getLastPathSegment();
-    //Toast.makeText(context, "URI added is: " + eventID, Toast.LENGTH_SHORT).show();
+  public static void insertItemToCalendar(final int CalendarID,
+          final Serializable entity,
+          final Context context) {
+    insertItemToCalendar(CalendarID, entity, context, 0);
   }
 
-  public static void deleteItemFromCalendar(Serializable entity, Context context) {
-    SessionEntity session = new SessionEntity();
-    PaperEntity paper = new PaperEntity();
-    //Create Projection and connection to calendar
+  public static void insertItemToCalendar(final int CalendarID,
+          final Serializable entity,
+          final Context context,
+          final int diff) {
+    SessionEntity session;
+    PaperEntity paper;
     ContentResolver cr = context.getContentResolver();
-    String[] EVENT_PROJECTION = new String[]{
+    ContentValues values = new ContentValues();
+    addBeginEndTimeToValues(values, diff, entity);
+    if (entity instanceof SessionEntity) {
+      session = (SessionEntity) entity;
+      values.put(CalendarContract.Events.TITLE, session.getTitle());
+      values.put(CalendarContract.Events.DESCRIPTION, context.getString(R.string.calendarEventDescription) + "sessionID" + session.getId());
+    } else {
+      paper = (PaperEntity) entity;
+      int sessionID = paper.getSession();
+      session = ConferenceDAO.getSessionByID(Integer.toString(sessionID), context);
+      values.put(CalendarContract.Events.TITLE, paper.getTitle());
+      values.put(CalendarContract.Events.DESCRIPTION, context.getString(R.string.calendarEventDescription) + "paperID" + paper.getId());
+    }
+    if (session != null) {
+      values.put(CalendarContract.Events.EVENT_LOCATION, session.getRoom());
+    }
+    values.put(CalendarContract.Events.EVENT_TIMEZONE, TimeZone.getDefault().getID());
+    values.put(CalendarContract.Events.CALENDAR_ID, CalendarID);
+    cr.insert(CalendarContract.Events.CONTENT_URI, values);
+  }
+
+  private static void addBeginEndTimeToValues(final ContentValues values, final int diff, final Serializable entity) {
+    try {
+      long startMillis = 0, durationMillis, endMillis = 0;
+      String givenDateString;
+      SimpleDateFormat sdf_start = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:sszzz");
+      if (entity instanceof SessionEntity) {
+        SessionEntity session = ((SessionEntity) entity);
+        givenDateString = session.getDatetime();
+        durationMillis = session.getLength() * 60 * 1000;
+        endMillis = durationMillis + startMillis;
+      } else {
+        PaperEntity paper = ((PaperEntity) entity);
+        givenDateString = paper.getDateTime();
+        endMillis = sdf_start.parse(paper.getDateTimeEnd()).getTime() + diff; //FIXME Removed 6 hrs due to Singapore Time. Delete on next conference;
+      }
+      Date mDate = sdf_start.parse(givenDateString);
+      startMillis = mDate.getTime() + diff;
+      values.put(CalendarContract.Events.DTSTART, startMillis);
+      values.put(CalendarContract.Events.DTEND, endMillis);
+    } catch (ParseException ex) {
+      Log.e(CalendarHelper.class.getName(), "ParseException", ex);
+    }
+  }
+  
+  public static void deleteItemFromCalendar(Serializable entity, Context context) {
+    ContentResolver cr = context.getContentResolver();
+    final String[] EVENT_PROJECTION = new String[]{
       CalendarContract.Events._ID,
       CalendarContract.Events.TITLE,
       CalendarContract.Events.DESCRIPTION,
       CalendarContract.Events.CALENDAR_ID
     };
-
-    /*Create a cursor and use the selection args to find the event by either its Session ID or its Paper ID
-     which is coded in the Description field of the calendar event.*/
-
-    Cursor cur = null;
     Uri uri = CalendarContract.Events.CONTENT_URI;
-    String selection = "((" + CalendarContract.Events.DESCRIPTION + " = ?))";
-
+    String selection = "((" + CalendarContract.Events.DESCRIPTION + SQLQuery.SQL_SEARCH_EQUAL + "))";
+    String[] selectionArgs;
     if (entity instanceof SessionEntity) {
-      session = (SessionEntity) entity;
-      String[] selectionArgs = new String[]{context.getString(R.string.calendarEventDescription) + "sessionID" + session.getId()};
-      System.out.println(context.getString(R.string.calendarEventDescription) + "sessionID" + session.getId());
-      // Submit the query and get a Cursor object back.
-      cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
-      //go through the cursor, find its event id and delete it.
-      if (cur.moveToFirst()) {
-        do {
-          String eventID = cur.getString(0);
-          Uri deleteURI = null;
-          Long eventIDlong = Long.parseLong(eventID);
-          deleteURI = ContentUris.withAppendedId(uri, eventIDlong);
-          int rows = context.getContentResolver().delete(deleteURI, null, null);
-          //      Toast.makeText(context, "Rows deleted: " + rows + "at content URI: " + deleteURI.toString() + "from calendar: " + cur.getString(3), Toast.LENGTH_SHORT).show();
-        } while (cur.moveToNext());
-      }
-
+      selectionArgs = new String[]{context.getString(R.string.calendarEventDescription) + "sessionID" + ((BaseEntity) entity).getId()};
     } else {
-      //if entity is a paper and not a session
-      paper = (PaperEntity) entity;
-      System.out.println(context.getString(R.string.calendarEventDescription) + "sessionID" + session.getId());
-      String[] selectionArgs = new String[]{context.getString(R.string.calendarEventDescription) + "paperID" + paper.getId()};
-      // Submit the query and get a Cursor object back.
-      cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
-      //go through the cursor, find its event id and delete it.
-      if (cur.moveToFirst()) {
-        do {
-          String eventID = cur.getString(0);
-          Uri deleteURI = null;
-          Long eventIDlong = Long.parseLong(eventID);
-          deleteURI = ContentUris.withAppendedId(uri, eventIDlong);
-          int rows = context.getContentResolver().delete(deleteURI, null, null);
-          //      Toast.makeText(context, "Rows deleted: " + rows + "at content URI: " + deleteURI.toString() + "from calendar: " + cur.getString(3), Toast.LENGTH_SHORT).show();
-        } while (cur.moveToNext());
-      }
+      selectionArgs = new String[]{context.getString(R.string.calendarEventDescription) + "paperID" + ((BaseEntity) entity).getId()};
     }
-
+    Cursor cur = cr.query(uri, EVENT_PROJECTION, selection, selectionArgs, null);
+    if (cur.moveToFirst()) {
+      do {
+        String eventID = cur.getString(0);
+        Uri deleteURI = ContentUris.withAppendedId(uri, Long.parseLong(eventID));
+        cr.delete(deleteURI, null, null);
+      } while (cur.moveToNext());
+    }
   }
 
   /**
