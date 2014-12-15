@@ -48,7 +48,6 @@ public class CalendarHelper {
   public static final String NULL_VALUE = "NULL";
 
   public static void showCalendarPicker(final Context context, final Serializable session) {
-
     List<String> calendarList = new ArrayList<String>();
     //this is the projection used to query the calendar adapter.
     String[] projection = new String[]{CalendarContract.Calendars._ID,
@@ -78,6 +77,15 @@ public class CalendarHelper {
       } while (calCursor.moveToNext());
     }
     calCursor.close();
+    createPickCalendarDialog(context, session, calendarIDs, calendarList);
+
+  }
+
+  
+  private static void createPickCalendarDialog(final Context context,
+                                               final Serializable session,
+                                               final int[] calendarIDs,
+                                               final List<String> calendarList) {
     String[] calendarListArray = calendarList.toArray(new String[calendarList.size()]);
     //setup of Dialog
     AlertDialog.Builder ADBuilder = new AlertDialog.Builder(context);
@@ -97,11 +105,8 @@ public class CalendarHelper {
     });
     AlertDialog dialog = ADBuilder.create();
     dialog.show();
-
-
+    
   }
-
-  
   private static CheckBox createCheckBox(Context context, String text) {
     CheckBox checkBox = new CheckBox(context);
     checkBox.setText(text);
