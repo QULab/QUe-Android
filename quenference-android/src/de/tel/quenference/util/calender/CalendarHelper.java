@@ -24,7 +24,6 @@ import android.provider.CalendarContract;
 import android.util.Log;
 import android.widget.CheckBox;
 import android.widget.LinearLayout;
-import android.widget.SeekBar;
 import android.widget.Toast;
 import de.tel.quenference.activities.R;
 import de.tel.quenference.db.dao.ConferenceDAO;
@@ -42,7 +41,7 @@ import java.util.concurrent.TimeUnit;
  * events from the calendar
  */
 public class CalendarHelper {
-  
+
   public static final String SHARED_PREF_CALENDAR_KEY = "prefWhichCalendar";
   public static final String SHARED_PREF_ADD_AUTO_TO_CALENDAR = "prefAddToCalendarAutomaticallyList";
   public static final String NULL_VALUE = "NULL";
@@ -51,16 +50,16 @@ public class CalendarHelper {
     List<String> calendarList = new ArrayList<String>();
     //this is the projection used to query the calendar adapter.
     String[] projection = new String[]{CalendarContract.Calendars._ID,
-                                       CalendarContract.Calendars.NAME,
-                                       CalendarContract.Calendars.ACCOUNT_NAME,
-                                       CalendarContract.Calendars.ACCOUNT_TYPE};
+      CalendarContract.Calendars.NAME,
+      CalendarContract.Calendars.ACCOUNT_NAME,
+      CalendarContract.Calendars.ACCOUNT_TYPE};
     final Cursor calCursor = context.getContentResolver()
-                                    .query(CalendarContract.Calendars.CONTENT_URI,
-                                           projection,
-                                           CalendarContract.Calendars.VISIBLE + " = 1",
-                                           null,
-                                           CalendarContract.Calendars._ID 
-                                            + SQLQuery.SQL_ASC_ORDER);
+            .query(CalendarContract.Calendars.CONTENT_URI,
+            projection,
+            CalendarContract.Calendars.VISIBLE + " = 1",
+            null,
+            CalendarContract.Calendars._ID
+            + SQLQuery.SQL_ASC_ORDER);
     final int calendarIDs[] = new int[calCursor.getCount()];
     if (calCursor.moveToFirst()) {
       int i = 0;
@@ -81,11 +80,10 @@ public class CalendarHelper {
 
   }
 
-  
   private static void createPickCalendarDialog(final Context context,
-                                               final Serializable session,
-                                               final int[] calendarIDs,
-                                               final List<String> calendarList) {
+          final Serializable session,
+          final int[] calendarIDs,
+          final List<String> calendarList) {
     String[] calendarListArray = calendarList.toArray(new String[calendarList.size()]);
     //setup of Dialog
     AlertDialog.Builder ADBuilder = new AlertDialog.Builder(context);
@@ -98,22 +96,23 @@ public class CalendarHelper {
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
         sharedPreferences.edit().putString(SHARED_PREF_CALENDAR_KEY, Integer.toString(calendarIndex)).apply();
         Toast.makeText(context,
-                       context.getString(R.string.toast_added_to_calendar),
-                       Toast.LENGTH_LONG).show();
+                context.getString(R.string.toast_added_to_calendar),
+                Toast.LENGTH_LONG).show();
 
       }
     });
     AlertDialog dialog = ADBuilder.create();
     dialog.show();
-    
+
   }
+
   private static CheckBox createCheckBox(Context context, String text) {
     CheckBox checkBox = new CheckBox(context);
     checkBox.setText(text);
     checkBox.setChecked(false);
     return checkBox;
   }
- 
+
   //This checks if the the option add to calendar is active, if not then it will prompt user for confirmation
   //and then it will show the list of calendars so the user can pick the appropriate one
   public static void attemptToAddToCalendar(final Context context, final Serializable entity) {
@@ -123,83 +122,95 @@ public class CalendarHelper {
 
     final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
     final String autoDecision = sharedPreferences.getString(SHARED_PREF_ADD_AUTO_TO_CALENDAR, "2");
-    
+
     if (autoDecision.equals("2")) {
       //CREATING ALERTBOX to ask whether to add to calendar and remember decision or not
       final CheckBox checkBox = createCheckBox(context, context.getString(R.string.checkbox_remember));
-      LinearLayout linearLayout = new LinearLayout(context);
-      linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-              LinearLayout.LayoutParams.MATCH_PARENT));
-      linearLayout.setOrientation(LinearLayout.VERTICAL);
-      linearLayout.addView(checkBox);
-
+      LinearLayout ll = createLLforAddToCalendar(context, checkBox);
       AlertDialog.Builder builder = new AlertDialog.Builder(context);
-      builder.setView(linearLayout);
-      builder.setMessage("Do you want to add this Session to your calendar?")
-             .setTitle("Add to Calendar?");
-      //ADD BUTTON
-      builder.setPositiveButton("Add to calendar", new DialogInterface.OnClickListener() {
-        @Override
-        //ADD BUTTON
-        public void onClick(DialogInterface dialog, int which) {
-          //  Toast.makeText(context, session.getTitle(), Toast.LENGTH_SHORT).show();
-          if (checkBox.isChecked()) {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
-            SharedPreferences.Editor prefEdit = sharedPref.edit();
-            prefEdit.putString("prefAddToCalendarAutomaticallyList", "0"); //If checked then preferences will be updated to always add items to calendar
-            Toast.makeText(context, sharedPref.getString("prefAddToCalendarAutomaticallyList", "Didnt work"), Toast.LENGTH_SHORT).show();
-            prefEdit.apply();
-          }
-          if (sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, NULL_VALUE).contentEquals("NULL")
-                  || sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, NULL_VALUE).contentEquals("")) {
-            showCalendarPicker(context, entity);
-            //Here item-adding function is called
-          } else {
-            try {
-              int calendarID = Integer.parseInt(sharedPreferences.getString("prefWhichCalendar", "0"));
-              insertItemToCalendar(calendarID, entity, context);
-              Toast.makeText(context, "Item added to favorites and calendar", Toast.LENGTH_SHORT).show();
-
-            } catch (Exception e) {
-              sharedPreferences.edit().putString("prefWhichCalendar", NULL_VALUE).commit();
-              Toast.makeText(context, "Something went wrong with inserting into calendar, please un-favorite and try again.", Toast.LENGTH_SHORT).show();
-            }
-          }
-
-        }
-      });
-      //DONT ADD BUTTON
-      builder.setNegativeButton("Don't add", new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          if (checkBox.isChecked()) {
-            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);// context.getSharedPreferences("preferences.xml", Context.MODE_PRIVATE);
-            SharedPreferences.Editor prefEdit = sharedPref.edit();
-            prefEdit.putString("prefAddToCalendarAutomaticallyList", "1"); //If checked then preferences will be updated to never add items to calendar
-            prefEdit.commit();
-            Toast.makeText(context, "item not Added", Toast.LENGTH_LONG).show();
-          }
-        }
-      });
+      builder.setView(ll);
+      builder.setMessage(context.getString(R.string.alert_head_add_to_cal))
+              .setTitle(context.getString(R.string.alert_head_add_to_cal));
+      addAddButtonToBuilder(context, entity, builder, checkBox, sharedPreferences);
+      addCancleButtonToBuilder(context, builder, checkBox);
       builder.show();
-    } else if (autoDecision.equals("0")) {
-      //Only called if items always are to be added to calendar.
-      if (sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, NULL_VALUE).contentEquals(NULL_VALUE)
-              || sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, NULL_VALUE).contentEquals("")) {
+    } else if (autoDecision.equals("0")) { //Only called if items always are to be added to calendar.
+      String cal = sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, NULL_VALUE);
+      if (cal.contentEquals(NULL_VALUE) || cal.isEmpty()) {
         showCalendarPicker(context, entity);
       }
-
       int calendarID = Integer.parseInt(sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, "0"));
-      insertItemToCalendar(calendarID, entity, context); //Here item-adding function is called
-      // Toast.makeText(context, "item Added", Toast.LENGTH_LONG).show();
-    } else if (autoDecision.equals("1")) {
-      //Only called if items always are never to be added to calendar.
-      //Toast.makeText(context, "item not Added, because setting prevents it", Toast.LENGTH_LONG).show();
+      insertItemToCalendar(calendarID, entity, context);
+    } else if (autoDecision.equals("1")) { //Only called if items always are never to be added to calendar
     }
+  }
+
+  private static LinearLayout createLLforAddToCalendar(final Context context,
+          final CheckBox checkBox) {
+
+    LinearLayout linearLayout = new LinearLayout(context);
+    linearLayout.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+            LinearLayout.LayoutParams.MATCH_PARENT));
+    linearLayout.setOrientation(LinearLayout.VERTICAL);
+    linearLayout.addView(checkBox);
+    return linearLayout;
+  }
+
+  private static void addAddButtonToBuilder(final Context context,
+          final Serializable entity,
+          final AlertDialog.Builder builder,
+          final CheckBox checkBox,
+          final SharedPreferences sharedPreferences) {
+    builder.setPositiveButton(context.getString(R.string.btn_add_to_cal), new DialogInterface.OnClickListener() {
+      @Override
+      //ADD BUTTON
+      public void onClick(DialogInterface dialog, int which) {
+        //  Toast.makeText(context, session.getTitle(), Toast.LENGTH_SHORT).show();
+        if (checkBox.isChecked()) {
+          SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
+          SharedPreferences.Editor prefEdit = sharedPref.edit();
+          prefEdit.putString(SHARED_PREF_ADD_AUTO_TO_CALENDAR, "0"); //If checked then preferences will be updated to always add items to calendar
+          Toast.makeText(context, sharedPref.getString(SHARED_PREF_ADD_AUTO_TO_CALENDAR, "Didnt work"), Toast.LENGTH_SHORT).show();
+          prefEdit.apply();
+        }
+        if (sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, NULL_VALUE).contentEquals(NULL_VALUE)
+                || sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, NULL_VALUE).isEmpty()) {
+          showCalendarPicker(context, entity);
+          //Here item-adding function is called
+        } else {
+          try {
+            int calendarID = Integer.parseInt(sharedPreferences.getString(SHARED_PREF_CALENDAR_KEY, "0"));
+            insertItemToCalendar(calendarID, entity, context);
+            Toast.makeText(context, context.getString(R.string.toast_added_to_calendar), Toast.LENGTH_SHORT).show();
+
+          } catch (Exception e) {
+            sharedPreferences.edit().putString(SHARED_PREF_CALENDAR_KEY, NULL_VALUE).commit();
+            Toast.makeText(context, context.getString(R.string.toast_add_failed), Toast.LENGTH_SHORT).show();
+          }
+        }
+      }
+    });
 
   }
 
+  private static void addCancleButtonToBuilder(final Context context,
+          final AlertDialog.Builder builder,
+          final CheckBox checkBox) {
+    builder.setNegativeButton(context.getString(R.string.btn_cancel), new DialogInterface.OnClickListener() {
+      @Override
+      public void onClick(DialogInterface dialog, int which) {
+        if (checkBox.isChecked()) {
+          SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(context);// context.getSharedPreferences("preferences.xml", Context.MODE_PRIVATE);
+          SharedPreferences.Editor prefEdit = sharedPref.edit();
+          prefEdit.putString(SHARED_PREF_ADD_AUTO_TO_CALENDAR, "1"); //If checked then preferences will be updated to never add items to calendar
+          prefEdit.commit();
+        }
+      }
+    });
+
+  }
   // for Sessions
+
   public static void insertItemToCalendar(int CalendarID, Serializable entity, Context context) {
     // Construct event details
     SessionEntity session = new SessionEntity();
@@ -287,6 +298,7 @@ public class CalendarHelper {
       CalendarContract.Events.DESCRIPTION,
       CalendarContract.Events.CALENDAR_ID
     };
+
     /*Create a cursor and use the selection args to find the event by either its Session ID or its Paper ID
      which is coded in the Description field of the calendar event.*/
 
@@ -333,26 +345,27 @@ public class CalendarHelper {
     }
 
   }
-  
+
   /**
    * Returns the begin and end time from the session as string array.
-   * 
+   *
    * @param session the session entity
    * @return the start and end time of the session
    */
   public static String[] getTimeFromSession(SessionEntity session) {
     return getTimeFromSession(session, 0l);
   }
+
   /**
-   * Returns the begin and end time from the session as string array.
-   * Calculates the diff to the time, useful for different timezones.
-   * 
+   * Returns the begin and end time from the session as string array. Calculates
+   * the diff to the time, useful for different timezones.
+   *
    * E.g. Singapore and Germany are 6h difference so you can give as diff
    * parameter -21600000.
-   * 
-   * 
+   *
+   *
    * @param session the session entity
-   * @param diff  the difference of the session time
+   * @param diff the difference of the session time
    * @return the start and end time of the session
    */
   public static String[] getTimeFromSession(SessionEntity session, long diff) {
@@ -372,33 +385,32 @@ public class CalendarHelper {
       Log.e(CalendarHelper.class.getName(), "ParseException getTimeFromSession", e);
     }
     return timeOut;
-    
+
   }
 
-  
   /**
    * Returns the begin and end day time from the session as string array.
-   * 
+   *
    * @param session the session entity
    * @return the start and end day time of the session
    */
   public static String[] getDayAndTimeFromSession(SessionEntity session) {
     return getDayAndTimeFromSession(session, 0);
   }
-  
+
   /**
    * Returns the begin and end day time from the session as string array.
    * Calculates the diff to the time, useful for different timezones.
-   * 
+   *
    * E.g. Singapore and Germany are 6h difference so you can give as diff
    * parameter -21600000.
-   * 
-   * 
+   *
+   *
    * @param session the session entity
-   * @param diff  the difference of the session time
+   * @param diff the difference of the session time
    * @return the start and end day time of the session
    */
-  public static String[] getDayAndTimeFromSession(SessionEntity session, long diff) { 
+  public static String[] getDayAndTimeFromSession(SessionEntity session, long diff) {
     String[] timeOut = {"NULLStart", "NULLEnd"};
     String dateTime = session.getDatetime();
     if (dateTime == null || dateTime.isEmpty()) {
@@ -422,5 +434,4 @@ public class CalendarHelper {
     }
     return timeOut;
   }
-  
 }
