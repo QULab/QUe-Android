@@ -27,20 +27,47 @@ import android.webkit.WebViewClient;
 import org.que.activities.R;
 
 /**
+ * Represents the Fragment for the web view.
+ * 
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class WebviewFragment extends Fragment {
 
+  /**
+   * The argument key for the url.
+   */
   public static final String ARG_WEBVIEW_FRAGMENT_URL = "webviewFragmentUrl";
+  
+  /**
+   * The argument key for the view title.
+   */
   public static final String ARG_WEBVIEW_FRAGMENT_TITLE = "webviewFragmentTitle";
+  
+  /**
+   * The tag for the url.
+   */
   private static final String TAG_WEBVIEW_URL = "webViewUrl";
+  
+  /**
+   * The tag for the view title.
+   */
   private static final String TAG_WEBVIEW_TITLE = "webViewTitle";
-  public static final String TAG_WEBVIEW_FRAGMENT_HTML_CODE = "webViewFragmentHTML";
-  public static final String ARG_WEBVIEW_FRAGMENT_HTML_CODE = "webViewFragmentHTMLCODE";
+  
+  
+  /**
+   * The url which should be loaded.
+   */
   private String url;
+  
+  /**
+   * The title of the fragment.
+   */
   private String title;
+  
+  /**
+   * The view which shows the webpage.
+   */
   private WebView content;
-  private String htmlCode;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
@@ -53,7 +80,6 @@ public class WebviewFragment extends Fragment {
     if (null != savedInstanceState) {
       url = savedInstanceState.getString(TAG_WEBVIEW_URL);
       title = savedInstanceState.getString(TAG_WEBVIEW_TITLE);
-      htmlCode = savedInstanceState.getString(ARG_WEBVIEW_FRAGMENT_HTML_CODE);
     }
 
     if (null == url) {
@@ -77,19 +103,7 @@ public class WebviewFragment extends Fragment {
       webSettings.setBuiltInZoomControls(true);
       webSettings.setSupportZoom(true);
       content.loadUrl(url);
-    } else if (htmlCode != null) {
-      System.out.println("trying to render HTML Code");
-      content = ((WebView) rootView.findViewById(R.id.webview));
-
-      //WebViewClient is enabled in order to force all links to load within the webview and also
-      // in order to enable JavaScript
-      content.setWebViewClient(new HelloWebViewClient());
-      WebSettings webSettings = content.getSettings();
-      webSettings.setJavaScriptEnabled(true);
-      webSettings.setBuiltInZoomControls(true);
-      webSettings.setSupportZoom(true);
-      content.loadData(htmlCode, "text/html", null);
-    }
+    } 
 
     getActivity().setTitle(title);
     return rootView;
