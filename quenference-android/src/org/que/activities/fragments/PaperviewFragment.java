@@ -46,179 +46,192 @@ import org.que.db.entities.PaperEntity;
 import org.que.db.entities.SessionEntity;
 
 /**
+ * Represents the fragment which shows the paper informations.
+ *
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class PaperviewFragment extends PaperDetailMenuFragment {
 
-    public static final String ARG_PAPERVIEW_FRAGMENT = "paper_arg";
-    private static final String TAG_PAPERVIEW = "paper_tag";
+  /**
+   * The argument key for the fragment.
+   */
+  public static final String ARG_PAPERVIEW_FRAGMENT = "paper_arg";
+  
+  /**
+   * The tag for the paper view.
+   */
+  private static final String TAG_PAPERVIEW = "paper_tag";
+  
+  /**
+   * The TextViews which shows the informations of the paper.
+   */
+  private TextView title, author, time, abstrct;
 
-    private TextView title, author, time, abstrct;
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (null == savedInstanceState) {
-            savedInstanceState = getArguments();
-        }
-
-        if (null != savedInstanceState) {
-            paper = (PaperEntity) savedInstanceState.getSerializable(TAG_PAPERVIEW);
-        }
-
-        if (null == paper) {
-            paper = (PaperEntity) savedInstanceState.getSerializable(ARG_PAPERVIEW_FRAGMENT);
-        }
+    if (null == savedInstanceState) {
+      savedInstanceState = getArguments();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        setFavIcon(favorited);
+    if (null != savedInstanceState) {
+      paper = (PaperEntity) savedInstanceState.getSerializable(TAG_PAPERVIEW);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_paperview, container, false);
-        title = ((TextView) rootView.findViewById(R.id.paper_title));
-        title.setText(paper.getTitle());
+    if (null == paper) {
+      paper = (PaperEntity) savedInstanceState.getSerializable(ARG_PAPERVIEW_FRAGMENT);
+    }
+  }
 
-        author = ((TextView) rootView.findViewById(R.id.paper_author));
-        setAuthors(author);
-//    author.setText(paper.getMainAuthor());
+  @Override
+  public void onResume() {
+    super.onResume();
+    setFavIcon(favorited);
+  }
 
-        time = ((TextView) rootView.findViewById(R.id.paper_speech_time));
-        time.setText(getTimeValue());
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container,
+          Bundle savedInstanceState) {
+    View rootView = inflater.inflate(R.layout.fragment_paperview, container, false);
+    title = ((TextView) rootView.findViewById(R.id.paper_title));
+    title.setText(paper.getTitle());
 
-        abstrct = ((TextView) rootView.findViewById(R.id.paper_abstract));
-        abstrct.setText(paper.getAbstrct());
+    author = ((TextView) rootView.findViewById(R.id.paper_author));
+    setAuthors(author);
 
+    time = ((TextView) rootView.findViewById(R.id.paper_speech_time));
+    time.setText(getTimeValue());
 
-//    getActivity().setTitle(paper.getTitle());
-        return rootView;
+    abstrct = ((TextView) rootView.findViewById(R.id.paper_abstract));
+    abstrct.setText(paper.getAbstrct());
+    return rootView;
+  }
+
+  /**
+   * Returns the time value of the paper.
+   * 
+   * @return the time value
+   */
+  private String getTimeValue() {
+    StringBuilder builder = new StringBuilder();
+
+    SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.paper_time_pattern));//"yyyy-MM-dd'T'hh:mm:ssZ"
+    Date begin = null, end = null;
+    try {
+      begin = sdf.parse(paper.getDateTime());
+      begin = new Date(begin.getTime());
+      end = sdf.parse(paper.getDateTimeEnd());
+      end = new Date(end.getTime());
+    } catch (ParseException ex) {
+      Log.e(PaperviewFragment.class.getName(), TAG_PAPERVIEW, ex);
+    }
+    if (begin != null && end != null) {
+      //Date Format
+      int style = DateFormat.MEDIUM;
+      Locale l = new Locale(getString(R.string.paper_date_locale));
+      DateFormat dateFormat = DateFormat.getDateInstance(style, l);
+
+      //Hour Format
+      SimpleDateFormat hourFormat = new SimpleDateFormat(getString(R.string.paper_hour_format));
+      builder.append(dateFormat.format(begin)) //date
+              .append("\n")
+              .append(hourFormat.format(begin))
+              .append(" ")
+              .append(getString(R.string.paper_hour_seperator))
+              .append(" ")
+              .append(hourFormat.format(end));
     }
 
-    private String getTimeValue() {
-        StringBuilder builder = new StringBuilder();
+    //now we set the venue and session
+    SessionEntity sessionEntity = ConferenceDAO.getSessionByID(Integer.toString(paper.getSession()), getActivity());
+    builder.append("\n");
+    builder.append(sessionEntity.getTitle());
+    builder.append("\n");
+    builder.append(sessionEntity.getRoom());
+    return builder.toString();
+  }
 
-        SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.paper_time_pattern));//"yyyy-MM-dd'T'hh:mm:ssZ"
-        Date begin = null, end = null;
-        try {
-            begin = sdf.parse(paper.getDateTime());
-            begin = new Date(begin.getTime() - 21600000); //FIXME Removed 6 hrs due to Singapore Time. Delete on next conference)
-            end = sdf.parse(paper.getDateTimeEnd());
-            System.out.println("End Time before removal of ms: " + end.getTime());
-            end = new Date(end.getTime() - 21600000); //FIXME Removed 6 hrs due to Singapore Time. Delete on next conference)
-        } catch (ParseException ex) {
-            Log.e(PaperviewFragment.class.getName(), TAG_PAPERVIEW, ex);
-        }
-        if (begin != null && end != null) {
-            //Date Format
-            int style = DateFormat.MEDIUM;
-            Locale l = new Locale(getString(R.string.paper_date_locale));
-            DateFormat dateFormat = DateFormat.getDateInstance(style, l);
+  /**
+   * Writes the authors of the paper into the TextView.
+   *
+   * @param view the view which should be used
+   */
+  private void setAuthors(final TextView view) {
+    final StringBuilder builder = new StringBuilder("");
+    String selection = ConferenceDBContract.ConferencePaperAuthors.COLUMN_NAME_PAPER_ID + SQLQuery.SQL_SEARCH_EQUAL;
+    SQLQuery query = new SQLQuery(selection, Entity.PAPER_AUTHORS, ConferenceDAO.PAPER_AUTHORS_COLUMNS);
+    query.setSelectionArgs(paper.getId().toString());
+    ConferenceDAO.getSelection(getActivity(),
+            new AsyncDBListReader.PostExecuteJob() {
+              public void doJob(final List result) {
+                new AsyncTask<Context, Void, List<AuthorEntity>>() {
+                  @Override
+                  protected List<AuthorEntity> doInBackground(Context... contexts) {
+                    List<AuthorEntity> authors = new ArrayList<AuthorEntity>();
+                    final ConferenceDBHelper DB_HELPER = new ConferenceDBHelper(contexts[0]);
+                    SQLiteDatabase db = DB_HELPER.getReadableDatabase();
+                    for (Object obj : result) {
+                      String select = ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
+                      SQLQuery query = new SQLQuery(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
+                      query.setSelectionArgs(((PaperAuthorsEntity) obj).getAuthorID().toString());
 
-            //Hour Format
-            SimpleDateFormat hourFormat = new SimpleDateFormat(getString(R.string.paper_hour_format));
-            builder.append(dateFormat.format(begin)) //date
-                    .append("\n")
-                    .append(hourFormat.format(begin))
-                    .append(" ")
-                    .append(getString(R.string.paper_hour_seperator))
-                    .append(" ")
-                    .append(hourFormat.format(end));
-        }
-
-        //now we set the venue and session
-        SessionEntity sessionEntity = ConferenceDAO.getSessionByID(Integer.toString(paper.getSession()), getActivity());
-        builder.append("\n");
-        builder.append(sessionEntity.getTitle());
-        builder.append("\n");
-        builder.append(sessionEntity.getRoom());
-        return builder.toString();
-    }
-
-    private void setAuthors(final TextView view) {
-        final StringBuilder builder = new StringBuilder("");
-        String selection = ConferenceDBContract.ConferencePaperAuthors.COLUMN_NAME_PAPER_ID + SQLQuery.SQL_SEARCH_EQUAL;
-        SQLQuery query = new SQLQuery(selection, Entity.PAPER_AUTHORS, ConferenceDAO.PAPER_AUTHORS_COLUMNS);
-        query.setSelectionArgs(paper.getId().toString());
-        ConferenceDAO.getSelection(getActivity(),
-                new AsyncDBListReader.PostExecuteJob() {
-
-                    public void doJob(final List result) {
-                        new AsyncTask<Context, Void, List<AuthorEntity>>() {
-
-                            @Override
-                            protected List<AuthorEntity> doInBackground(Context... contexts) {
-                                List<AuthorEntity> authors = new ArrayList<AuthorEntity>();
-                                final ConferenceDBHelper DB_HELPER = new ConferenceDBHelper(contexts[0]);
-                                SQLiteDatabase db = DB_HELPER.getReadableDatabase();
-                                for (Object obj : result) {
-                                    String select = ConferenceDBContract.ConferenceAuthor.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-                                    SQLQuery query = new SQLQuery(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
-                                    query.setSelectionArgs(((PaperAuthorsEntity) obj).getAuthorID().toString());
-
-                                    Cursor c = db.query(ConferenceDBContract.ConferenceAuthor.TABLE_NAME,
-                                            ConferenceDAO.AUTHOR_COLUMNS, query.getSelection(),
-                                            query.getSelectionArgs(), query.getGroupBy(),
-                                            query.getHaving(), query.getHaving());
-                                    c.moveToFirst();
-                                    while (!c.isAfterLast()) {
-                                        AuthorEntity p = (AuthorEntity) ConferenceDAO.getAuthorCursorExtractor().extract(c);
-                                        authors.add(p);
-                                        c.moveToNext();
-                                    }
-                                    c.close();
-                                }
-                                DB_HELPER.close();
-                                return authors;
-                            }
-
-                            @Override
-                            protected void onPostExecute(List<AuthorEntity> result) {
-                                super.onPostExecute(result);
-                                for (AuthorEntity a : result) {
-                                    //if (a.getId() != paper.getMainAuthorId()) //get only co authors
-                                    builder.append(a.getFullName()).append(", ");
-                                }
-                                view.setText(builder.toString());
-                            }
-                        }.execute(getActivity());
+                      Cursor c = db.query(ConferenceDBContract.ConferenceAuthor.TABLE_NAME,
+                              ConferenceDAO.AUTHOR_COLUMNS, query.getSelection(),
+                              query.getSelectionArgs(), query.getGroupBy(),
+                              query.getHaving(), query.getHaving());
+                      c.moveToFirst();
+                      while (!c.isAfterLast()) {
+                        AuthorEntity p = (AuthorEntity) ConferenceDAO.getAuthorCursorExtractor().extract(c);
+                        authors.add(p);
+                        c.moveToNext();
+                      }
+                      c.close();
                     }
-                }, query);
-    }
+                    DB_HELPER.close();
+                    return authors;
+                  }
 
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-        outState.putSerializable(TAG_PAPERVIEW, paper);
-    }
+                  @Override
+                  protected void onPostExecute(List<AuthorEntity> result) {
+                    super.onPostExecute(result);
+                    for (AuthorEntity a : result) {
+                      //if (a.getId() != paper.getMainAuthorId()) //get only co authors
+                      builder.append(a.getFullName()).append(", ");
+                    }
+                    view.setText(builder.toString());
+                  }
+                }.execute(getActivity());
+              }
+            }, query);
+  }
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        //APPEND SCREEN TO LOGGER
-//    logger.appendLog(start, new Date().getTime(), application);
-    }
+  @Override
+  public void onSaveInstanceState(Bundle outState) {
+    super.onSaveInstanceState(outState);
+    outState.putSerializable(TAG_PAPERVIEW, paper);
+  }
 
-    @Override
-    protected SQLQuery getFavoriteUpdateSQLQuery() {
-        String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
-        SQLQuery query = new SQLQuery(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
-        query.setSelectionArgs(paper.getId().toString());
-        return query;
-    }
+  @Override
+  public void onDestroy() {
+    super.onDestroy();
+  }
 
-    @Override
-    protected String getFavoriteColumnName() {
-        return ConferenceDBContract.ConferencePaper.COLUMN_NAME_FAVORITE;
-    }
+  @Override
+  protected SQLQuery getFavoriteUpdateSQLQuery() {
+    String select = ConferenceDBContract.ConferencePaper.COLUMN_NAME_ID + SQLQuery.SQL_SEARCH_EQUAL;
+    SQLQuery query = new SQLQuery(select, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
+    query.setSelectionArgs(paper.getId().toString());
+    return query;
+  }
 
-    @Override
-    protected Serializable getEntity() {
-        return paper;
-    }
+  @Override
+  protected String getFavoriteColumnName() {
+    return ConferenceDBContract.ConferencePaper.COLUMN_NAME_FAVORITE;
+  }
+
+  @Override
+  protected Serializable getEntity() {
+    return paper;
+  }
 }
