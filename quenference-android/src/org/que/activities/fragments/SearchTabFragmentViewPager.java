@@ -28,6 +28,8 @@ import org.que.activities.R;
 import org.que.db.dao.ConferenceDAO;
 
 /**
+ * Represents the fragment for the search tab.
+ * 
  * @author deLaczkovich, Christopher Zell <zelldon91@googlemail.com>
  */
 public class SearchTabFragmentViewPager extends Fragment {
@@ -52,14 +54,21 @@ public class SearchTabFragmentViewPager extends Fragment {
    * The argument key for the title of the search.
    */
   public static final String ARG_SEARCH_FRAGMENT = "searchTitle";
-  //the title of the page
+  /**
+   * The argument key for the title of the page
+   */
   public static final String ARG_SEARCH_TITLE = "pageTitle";
   /**
    * The values to search for.
    */
   private String searchValue;
+  
+  /**
+   * The page title.
+   */
   private String pageTitle = "noTitle";
 
+  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
@@ -80,6 +89,7 @@ public class SearchTabFragmentViewPager extends Fragment {
 
   }
 
+  @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     View root = inflater.inflate(R.layout.fragment_search_viewpager, container, false);
 
@@ -93,6 +103,9 @@ public class SearchTabFragmentViewPager extends Fragment {
     return root;
   }
 
+  /**
+   * The FragmentPagerAdapter for the SearchTab.
+   */
   public class MyAdapter extends FragmentPagerAdapter {
 
     public MyAdapter(FragmentManager fm) {
