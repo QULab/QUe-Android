@@ -24,43 +24,61 @@ import java.util.List;
 import org.que.activities.R;
 
 /**
+ * Represents the page adapter for the MapFragment.
+ *
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class MapFragmentPageAdapter extends FragmentPagerAdapter {
 
-    private static int[] images = {R.drawable.map,
-            R.drawable.map2};
+  /**
+   * The drawables which should be shown by the MapFragment.
+   */
+  private static int[] images = {R.drawable.map,
+    R.drawable.map2};
+  
+  /**
+   * The fragments which will be used to show the drawables.
+   */
+  private List<MapImageFragment> frgmts;
 
-    private List<MapImageFragment> frgmts;
-
-
-    public MapFragmentPageAdapter(FragmentManager fm) {
-        super(fm);
-        frgmts = new ArrayList<MapImageFragment>();
-        for (int i = 0; i < images.length; i++) {
-            MapImageFragment f = new MapImageFragment();
-            Bundle arg = new Bundle();
-            arg.putInt(MapImageFragment.ARG_MAP_IMAGE_FRAGMENT, images[i % images.length]);
-            f.setArguments(arg);
-            frgmts.add(f);
-        }
-
+  /**
+   * The ctor to create a MapFragmentPageAdapter.
+   * 
+   * @param fm the fragmentManager which will be used for the page adapter
+   */
+  public MapFragmentPageAdapter(FragmentManager fm) {
+    super(fm);
+    frgmts = new ArrayList<MapImageFragment>();
+    for (int i = 0; i < images.length; i++) {
+      MapImageFragment f = new MapImageFragment();
+      Bundle arg = new Bundle();
+      arg.putInt(MapImageFragment.ARG_MAP_IMAGE_FRAGMENT, images[i % images.length]);
+      f.setArguments(arg);
+      frgmts.add(f);
     }
 
-    @Override
-    public Fragment getItem(int i) {
-        if (i >= 2)
-            frgmts.get(i - 2).clear();
-        return frgmts.get(i);
-    }
+  }
 
-    @Override
-    public int getCount() {
-        return images.length;
+  @Override
+  public Fragment getItem(int i) {
+    if (i >= 2) {
+      frgmts.get(i - 2).clear();
     }
+    return frgmts.get(i);
+  }
 
-    public int getImageResID(int pos) {
-        return images[pos];
-    }
+  @Override
+  public int getCount() {
+    return images.length;
+  }
 
+  /**
+   * Returns the drawable resource id for the given position.
+   * 
+   * @param pos the position in the array
+   * @return the drawable resource id
+   */
+  public int getImageResID(int pos) {
+    return images[pos];
+  }
 }
