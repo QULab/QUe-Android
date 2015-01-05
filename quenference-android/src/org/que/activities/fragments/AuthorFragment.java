@@ -31,14 +31,30 @@ import org.que.db.dao.SQLQuery;
 import org.que.db.entities.AuthorEntity;
 
 /**
- *
+ * Represents the Fragment which shows the information of the Author.
+ * 
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
-public class AuthorviewFragment extends Fragment {
+public class AuthorFragment extends Fragment {
 
+  /**
+   * The argument key of the fragment.
+   */
   public static final String ARG_AUTHORVIEW_FRAGMENT = "author_arg";
+  
+  /**
+   * The tag of the author view.
+   */
   private static final String TAG_AUTHORVIEW = "author_tag";
+  
+  /**
+   * The author entity which contains the author informations.
+   */
   private AuthorEntity author;
+  
+  /**
+   * The TextViews which should show the author informations.
+   */
   private TextView name, affiliation;
 
   @Override

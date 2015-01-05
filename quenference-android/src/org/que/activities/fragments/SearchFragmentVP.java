@@ -147,8 +147,8 @@ public class SearchFragmentVP extends ListFragment {
       args.putSerializable(PaperviewFragment.ARG_PAPERVIEW_FRAGMENT, entity);
     } else if (searchFragmentVP == SearchTabFragmentViewPager.TabSearch.AUTHOR) {
       AuthorEntity entity = (AuthorEntity) getListAdapter().getItem(position);
-      frg = new AuthorviewFragment();
-      args.putSerializable(AuthorviewFragment.ARG_AUTHORVIEW_FRAGMENT, entity);
+      frg = new AuthorFragment();
+      args.putSerializable(AuthorFragment.ARG_AUTHORVIEW_FRAGMENT, entity);
 
     } else if (searchFragmentVP == SearchTabFragmentViewPager.TabSearch.SESSION) {
       SessionEntity entity = (SessionEntity) getListAdapter().getItem(position);
