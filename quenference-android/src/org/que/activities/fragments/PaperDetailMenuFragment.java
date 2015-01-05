@@ -38,11 +38,17 @@ import org.que.activities.fragments.dialogs.AuthRequiredDialogFragment;
 import org.que.db.entities.PaperEntity;
 
 /**
+ * Represents the Fragment for the paper detail menu.
+ * The menu enables to download the pdf of the paper or to show it
+ * in the browser.
+ * 
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public abstract class PaperDetailMenuFragment extends FavoriteMenuFragment {
 
-  public static String TAG_PAPER_API_KEY = "API_KEY";
+  /**
+   * The paper entity which contains the paper informations.
+   */
   protected PaperEntity paper;
 
   @Override
