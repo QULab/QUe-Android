@@ -25,16 +25,31 @@ import android.widget.TextView;
 import org.que.activities.R;
 
 /**
- *
+ * Represents the main Map Fragment which shows the Map.
+ * 
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class MapFragment extends Fragment {
   
+  /**
+   * The argument key of the fragment.
+   */
   public static final String ARG_MAP_FRAGMENT = "mapFrag";
   
+  /**
+   * The page adapter for the map.
+   */
   private MapFragmentPageAdapter adapter;
+  
+  /**
+   * The pager which shows the different maps.
+   */
   private ViewPager pager;
-  private TextView pager_indicator;
+  
+  /**
+   * The page indicator which shows the current page information.
+   */
+  private TextView pageIndicator;
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -48,7 +63,7 @@ public class MapFragment extends Fragment {
     pager = (ViewPager) rootView.findViewById(R.id.map_pager);
     pager.setAdapter(adapter);
     
-    pager_indicator = (TextView) rootView.findViewById(R.id.map_indicator);
+    pageIndicator = (TextView) rootView.findViewById(R.id.map_indicator);
     setTextToIndicator(0);
     pager.setOffscreenPageLimit(0);
     pager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -67,10 +82,15 @@ public class MapFragment extends Fragment {
     return rootView;
   }
   
+  /**
+   * Sets the page indication information.
+   * 
+   * @param page the page indication
+   */
   private void setTextToIndicator(int page) {
     int size = pager.getAdapter().getCount();
     String indicator = String.format(getString(R.string.map_indicator_str), page+1, size);
-    pager_indicator.setText(indicator);
+    pageIndicator.setText(indicator);
   }
   
 }
