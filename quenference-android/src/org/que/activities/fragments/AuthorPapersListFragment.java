@@ -33,7 +33,9 @@ import org.que.db.entities.PaperEntity;
 import org.que.util.EntityListAdapter;
 
 /**
- *
+ * Represents the Fragment which shows the Papers for an given Author.
+ * Extends the general SearchFragmentVP and overrides the search method.
+ * 
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class AuthorPapersListFragment extends SearchFragmentVP {
