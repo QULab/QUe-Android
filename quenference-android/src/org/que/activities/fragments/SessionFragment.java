@@ -36,7 +36,7 @@ import org.que.db.entities.SessionEntity;
  *
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
-public class SessionViewFragment extends FavoriteMenuFragment {
+public class SessionFragment extends FavoriteMenuFragment {
 
   /**
    * The argument key for the fragment.

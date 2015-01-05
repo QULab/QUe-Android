@@ -143,8 +143,8 @@ public class CalendarBookedFragment extends ListFragment implements LoaderManage
                 //itemID cleans up the description String first to get the Database ID of the Session
                 itemID = description.replace(getActivity().getString(R.string.calendarEventDescription) + "sessionID", "");
                 SessionEntity entity = ConferenceDAO.getSessionByID(itemID, getActivity());
-                args.putSerializable(SessionViewFragment.ARG_SESSIONVIEW_FRAGMENT, entity);
-                frg = new SessionViewFragment();
+                args.putSerializable(SessionFragment.ARG_SESSIONVIEW_FRAGMENT, entity);
+                frg = new SessionFragment();
 
 
             } else if (description.contains("paper")) {

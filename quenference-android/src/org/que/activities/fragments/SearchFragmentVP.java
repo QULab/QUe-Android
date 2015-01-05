@@ -152,13 +152,13 @@ public class SearchFragmentVP extends ListFragment {
 
     } else if (searchFragmentVP == SearchTabFragmentViewPager.TabSearch.SESSION) {
       SessionEntity entity = (SessionEntity) getListAdapter().getItem(position);
-      frg = new SessionViewFragment();
-      args.putSerializable(SessionViewFragment.ARG_SESSIONVIEW_FRAGMENT, entity);
+      frg = new SessionFragment();
+      args.putSerializable(SessionFragment.ARG_SESSIONVIEW_FRAGMENT, entity);
 
     } else if (searchFragmentVP == SearchTabFragmentViewPager.TabSearch.AGENDA) {
       SessionEntity entity = (SessionEntity) getListAdapter().getItem(position);
-      frg = new SessionViewFragment();
-      args.putSerializable(SessionViewFragment.ARG_SESSIONVIEW_FRAGMENT, entity);
+      frg = new SessionFragment();
+      args.putSerializable(SessionFragment.ARG_SESSIONVIEW_FRAGMENT, entity);
     }
 
     if (frg != null) {
