@@ -13,7 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package org.que.activities.fragments;
 
 import android.os.Bundle;
@@ -31,63 +30,57 @@ import org.que.db.dao.SQLQuery;
 import org.que.db.entities.PaperEntity;
 
 /**
+ * Represents the Fragment which shows the speeches of a session.
+ * 
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public class SessionSpeechesList extends SearchFragmentVP {
 
+  @Override
+  public ListAdapter getListAdapter(TabSearch searchfrg) {
+    return new SessionSpeechesListAdapter(getActivity());
+  }
 
   @Override
-    public ListAdapter getListAdapter(TabSearch searchfrg) {
-        //Log.d(SessionSpeechesList.class.getName(), "GETLIST ADAPTER!!!!");
-        return new SessionSpeechesListAdapter(getActivity());
+  protected void search() {
+    if (query == null) {
+      String selection = ConferenceDBContract.ConferencePaper.COLUMN_NAME_SESSION + SQLQuery.SQL_SEARCH_EQUAL;
+      query = new SQLQuery(selection, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
+      query.setSelectionArgs(new String[]{"1"});
     }
 
+    ConferenceDAO.getSelection(getActivity(), new AsyncDBListReader.PostExecuteJob() {
+      public void doJob(final List result) {
+        ((SessionSpeechesListAdapter) getListAdapter()).setSpeeches(result);
+        ((SessionSpeechesListAdapter) getListAdapter()).notifyDataSetChanged();
+      }
+    }, query);
+  }
 
-    @Override
-    protected void search() {
-        if (query == null) {
-            String selection = ConferenceDBContract.ConferencePaper.COLUMN_NAME_SESSION + SQLQuery.SQL_SEARCH_EQUAL;
-            query = new SQLQuery(selection, Entity.PAPER, ConferenceDAO.PAPER_COLUMNS);
-            query.setSelectionArgs(new String[]{"1"});
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
+    if (getListView() != null) {
+      getListView().setOnTouchListener(new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(View v, MotionEvent event) {
+          // Disallow the touch request for parent scroll on touch of child view
+          v.getParent().requestDisallowInterceptTouchEvent(true);
+          return false;
         }
-
-        ConferenceDAO.getSelection(getActivity(), new AsyncDBListReader.PostExecuteJob() {
-
-            public void doJob(final List result) {
-                ((SessionSpeechesListAdapter) getListAdapter()).setSpeeches(result);
-                ((SessionSpeechesListAdapter) getListAdapter()).notifyDataSetChanged();
-            }
-        }, query);
+      });
     }
+  }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-//    setListAdapter(null);
+  @Override
+  public void onListItemClick(ListView l, View v, int position, long id) {
+    if (getListAdapter().getItem(position) instanceof PaperEntity) {
+      super.onListItemClick(l, v, position, id);
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (getListView() != null) {
-            getListView().setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View v, MotionEvent event) {
-                    // Disallow the touch request for parent scroll on touch of child view
-                    v.getParent().requestDisallowInterceptTouchEvent(true);
-                    return false;
-                }
-            });
-        }
-    }
-
-    @Override
-    public void onListItemClick(ListView l, View v, int position, long id) {
-        if (getListAdapter().getItem(position) instanceof PaperEntity)
-            super.onListItemClick(l, v, position, id);
-        //else do nothing - section was clicked
-    }
-
-
+  }
 }
