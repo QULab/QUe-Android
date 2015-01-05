@@ -28,11 +28,21 @@ import org.que.db.dao.SQLQuery;
 import org.que.util.calender.CalendarHelper;
 
 /**
+ * Represents the favorite options menu which will be shown in the action bar
+ * of the navigation drawer.
+ * 
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
 public abstract class FavoriteMenuFragment extends Fragment {
 
+  /**
+   * The favorite menu item.
+   */
   protected MenuItem item;
+  
+  /**
+   * The flag indicates whether the favorite is set or not.
+   */
   protected boolean favorited;
 
   @Override
@@ -41,10 +51,26 @@ public abstract class FavoriteMenuFragment extends Fragment {
     setHasOptionsMenu(true);
   }
 
+  /**
+   * Returns the SQLQuery which should be used to update the favorite column
+   * of the entity.
+   * 
+   * @return the SQLQuery
+   */
   protected abstract SQLQuery getFavoriteUpdateSQLQuery();
 
+  /**
+   * Returns the favorite column name of the entity.
+   * 
+   * @return the favorite column name
+   */
   protected abstract String getFavoriteColumnName();
 
+  /**
+   * Returns the current entity which can be favoured.
+   * 
+   * @return the entity
+   */
   protected abstract Serializable getEntity();
 
   @Override
@@ -70,8 +96,6 @@ public abstract class FavoriteMenuFragment extends Fragment {
   @Override
   public void onPrepareOptionsMenu(Menu menu) {
     super.onPrepareOptionsMenu(menu);
-    //TODO BUG FIX - Nicholas look over it
-//        getActivity().invalidateOptionsMenu(); 
     item = menu.findItem(R.id.action_favorite);
     if (favorited) {
       item.setIcon(R.drawable.ic_favorite_set);
@@ -92,12 +116,12 @@ public abstract class FavoriteMenuFragment extends Fragment {
         setFavIcon(false);
         fav = 0;
         CalendarHelper.deleteItemFromCalendar(getEntity(), getActivity());
-        Toast.makeText(getActivity(), "Removing item from favorites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.removed), Toast.LENGTH_SHORT).show();
       } else {
         setFavIcon(true);
         fav = 1;
         CalendarHelper.attemptToAddToCalendar(getActivity(), getEntity());
-        Toast.makeText(getActivity(), "Added item to favorites", Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), getString(R.string.added), Toast.LENGTH_SHORT).show();
       }
 
       query.addValues(getFavoriteColumnName(), fav.toString());

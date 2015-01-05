@@ -80,7 +80,9 @@
     <!--MAP VIEW STRINGS-->
     <string name="map_image_descr">Map-Image</string>
     <string name="map_indicator_str">%1$d / %2$d</string>
-
+    <!--Favorite Menu Strings-->
+    <string name="added">Added item to favorites</string>
+    <string name="removed">Removing item from favorites</string>
 
     <!--PREFERENCES STRING -->
     <string-array name="prefARaddToCalendarAutomatically">
