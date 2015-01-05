@@ -50,7 +50,7 @@ import org.que.db.entities.SessionEntity;
  *
  * @author Christopher Zell <zelldon91@googlemail.com>
  */
-public class PaperviewFragment extends PaperDetailMenuFragment {
+public class PaperFragment extends PaperDetailMenuFragment {
 
   /**
    * The argument key for the fragment.
@@ -124,7 +124,7 @@ public class PaperviewFragment extends PaperDetailMenuFragment {
       end = sdf.parse(paper.getDateTimeEnd());
       end = new Date(end.getTime());
     } catch (ParseException ex) {
-      Log.e(PaperviewFragment.class.getName(), TAG_PAPERVIEW, ex);
+      Log.e(PaperFragment.class.getName(), TAG_PAPERVIEW, ex);
     }
     if (begin != null && end != null) {
       //Date Format

@@ -151,8 +151,8 @@ public class CalendarBookedFragment extends ListFragment implements LoaderManage
                 itemID = description.replace(getActivity().getString(R.string.calendarEventDescription) + "paperID", "");
                 PaperEntity entity = new PaperEntity();
                 entity = ConferenceDAO.getPaperByID(itemID, getActivity());
-                args.putSerializable(PaperviewFragment.ARG_PAPERVIEW_FRAGMENT, entity);
-                frg = new PaperviewFragment();
+                args.putSerializable(PaperFragment.ARG_PAPERVIEW_FRAGMENT, entity);
+                frg = new PaperFragment();
 
             }
         } catch (NullPointerException e) {
