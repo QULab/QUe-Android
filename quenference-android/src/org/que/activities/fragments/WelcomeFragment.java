@@ -24,6 +24,8 @@ import android.view.ViewGroup;
 import org.que.activities.R;
 
 /**
+ * Represents the Fragment for the welcome page.
+ * 
  * Created by deLaczkovich on 26-Aug-14.
  * @author deLaczkovich, Christopher Zell <zelldon91@googlemail.com>
  */
@@ -32,10 +34,7 @@ public class WelcomeFragment extends Fragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container,
           Bundle savedInstanceState) {
-
     View rootView = inflater.inflate(R.layout.fragment_welcome, container, false);
-
-
     return rootView;
   }
 }
