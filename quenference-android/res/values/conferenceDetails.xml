@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array
-            name="Conference_Dates">
-        <item>15/09/2014</item>
-        <item>16/09/2014</item>
-        <item>17/09/2014</item>
-        <item>18/09/2014</item>
-    </string-array>
-    <string name="calendarEventDescription">IS2014:</string>
+  <!--14th of September 2014 06:00 GMT+8-->
+  <string name="startDate">1410645600000</string>
+  <string-array
+    name="Conference_Dates">
+    <item>15/09/2014</item>
+    <item>16/09/2014</item>
+    <item>17/09/2014</item>
+    <item>18/09/2014</item>
+  </string-array>
+  <string name="calendarEventDescription">IS2014:</string>
 </resources>

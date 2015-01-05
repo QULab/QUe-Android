@@ -31,6 +31,7 @@
     <string name="app_not_available">Sorry, there\'s no web browser available</string>
     <string name="progress">Please wait&#8230;</string>
 
+    <string name="ok">Ok</string>
 
     <!--PREFERENCES-->
     <string name="pref_api_key">api_key</string>
@@ -57,6 +58,18 @@
     <string name="paper_header_author">Authors</string>
     <string name="paper_header_time">Time</string>
     <string name="paper_header_abstract">Abstract</string>
+    
+    <!--Paper Detail Menu-->
+    <string name="notAvailable">Sorry, but this feature will only be available only on and after the 14th.</string>
+    <string name="authSuccess">Authentication successful</string>
+    <string name="viewQuestionTitle">How would you like to view it?</string>
+    <string name="viewQuestionMsg">If you have a PDF viewer installed we recommend
+                                   you download the file and view it on your phone.
+                                   \nAlternatively it can be rendered by a Google service</string>
+    <string name="pdfViewerAvail">I have a PDF Viewer</string>
+    <string name="noPdfViewerAvail">View it through Google</string>
+    <string name="paperDwnlTitle">Paper Download</string>
+    <string name="paperDwnlMsg">Getting the PDF for you</string>
     <!--"yyyy-MM-dd'T'hh:mm:ssZ"-->
     <string name="paper_time_pattern">yyyy-MM-dd\'T\'HH:mm:ssZ</string>
     <string name="paper_date_locale">en</string>

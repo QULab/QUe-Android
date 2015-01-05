@@ -56,15 +56,21 @@ public abstract class PaperDetailMenuFragment extends FavoriteMenuFragment {
     item = menu.findItem(R.id.action_favorite);
   }
 
+  /**
+   * @author deLaczkovich on 26.06.2014.
+   * @param item
+   * @return 
+   */
   @Override
   public boolean onOptionsItemSelected(MenuItem item) {
     Date d = new Date();
 
     if (item.getItemId() == R.id.action_paper_detail) {
-      if (d.getTime() < 1410645600000l) { //14th of September 2014 06:00 GMT+8
+      long startDate = Long.parseLong(getString(R.string.startDate));
+      if (d.getTime() < startDate) { 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setMessage("Sorry, but this feature will only be available only on and after the 14th.");
-        builder.setNeutralButton("Ok.", new DialogInterface.OnClickListener() {
+        builder.setMessage(getString(R.string.notAvailable));
+        builder.setNeutralButton(getString(R.string.ok), new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
 
@@ -80,33 +86,31 @@ public abstract class PaperDetailMenuFragment extends FavoriteMenuFragment {
       if (apiKey == null) {
         DialogFragment auth_required = new AuthRequiredDialogFragment();
         auth_required.show(getActivity().getSupportFragmentManager(), AuthRequiredDialogFragment.TAG_AUTH_REQUIRED);
-        Toast.makeText(getActivity(), "Authentication successful", Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity(), getString(R.string.authSuccess), Toast.LENGTH_LONG).show();
 
       } else {
         //TODO Paper detail view call
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle("How would you like to view it?")
-                .setMessage("If you have a PDF viewer installed we recommend you download the file and view it on your phone.\nAlternatively it can be rendered by a Google service")
-                .setPositiveButton("I have a PDF Viewer", new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.viewQuestionTitle))
+                .setMessage(getString(R.string.viewQuestionMsg))
+                .setPositiveButton(getString(R.string.pdfViewerAvail), new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            DownloadManager downloadManager = (DownloadManager) getActivity().getSystemService(getActivity().DOWNLOAD_SERVICE);
+            DownloadManager downloadManager = (DownloadManager) getActivity().getSystemService(Context.DOWNLOAD_SERVICE);
             String url = String.format(getString(R.string.alert_paper_view_url_direct), paper.getId(), apiKey);
             Uri Download_Uri = Uri.parse(url);
             String fileName = paper.getTitle() + ".pdf";
             DownloadManager.Request request = new DownloadManager.Request(Download_Uri)
                     .setAllowedNetworkTypes(DownloadManager.Request.NETWORK_MOBILE | DownloadManager.Request.NETWORK_WIFI)
-                    .setTitle("Paper Download")
-                    .setDescription("Getting the PDF for you")
+                    .setTitle(getString(R.string.paperDwnlTitle))
+                    .setDescription(getString(R.string.paperDwnlMsg))
                     .setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fileName)
                     .setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE | DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
             downloadManager.enqueue(request);
-            Toast.makeText(getActivity(), "Download starting! Check your notification area for the status", Toast.LENGTH_LONG).show();
-
           }
         })
-                .setNegativeButton("View it through Google", new DialogInterface.OnClickListener() {
+                .setNegativeButton(getString(R.string.noPdfViewerAvail), new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
             Bundle args = new Bundle();
