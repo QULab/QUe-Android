@@ -68,7 +68,7 @@ public class PropertiesProvider {
   private final Properties properties;
 
   /**
-   * The default constructor to create a moccha properties object.
+   * The default constructor to create a properties provider object.
    */
   private PropertiesProvider() {
     properties = new Properties();
