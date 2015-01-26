@@ -80,14 +80,9 @@ public class SearchFragmentVP extends ListFragment {
   @Override
   public void onPause() {
     super.onPause();
-    try {
-      index = this.getListView().getFirstVisiblePosition();
-      View v = this.getListView().getChildAt(0);
-      top = (v == null) ? 0 : v.getTop();
-    } catch (Throwable t) {
-      t.printStackTrace();
-    }
-
+    index = this.getListView().getFirstVisiblePosition();
+    View v = this.getListView().getChildAt(0);
+    top = (v == null) ? 0 : v.getTop();
   }
 
   @Override
