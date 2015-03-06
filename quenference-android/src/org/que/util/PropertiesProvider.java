@@ -55,6 +55,11 @@ public class PropertiesProvider {
    */
   public static final String PAPERS_URL_PROP = "papers.url";
   
+  /**
+   * The property which should contain the boolean value if the download is allowed or not.
+   */
+  public static final String PAPER_DOWNLOAD_KEY = "paper.download";
+  
   //============================================================
   
   /**

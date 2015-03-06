@@ -36,6 +36,7 @@ import java.util.Date;
 import org.que.activities.R;
 import org.que.activities.fragments.dialogs.AuthRequiredDialogFragment;
 import org.que.db.entities.PaperEntity;
+import org.que.util.PropertiesProvider;
 
 /**
  * Represents the Fragment for the paper detail menu.
@@ -50,16 +51,26 @@ public abstract class PaperDetailMenuFragment extends FavoriteMenuFragment {
    * The paper entity which contains the paper informations.
    */
   protected PaperEntity paper;
+  
+  /**
+   * Indicates if the paper detail or download is allowed or not.
+   */
+  protected boolean paperDownloadAllowed;
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    PropertiesProvider provider = PropertiesProvider.getInstance();
+    paperDownloadAllowed = Boolean.parseBoolean(provider.getProperty(PropertiesProvider.PAPER_DOWNLOAD_KEY));
   }
 
   @Override
   public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.paper_detail_menu, menu);
-    item = menu.findItem(R.id.action_favorite);
+    if (paperDownloadAllowed) {
+      inflater.inflate(R.menu.paper_detail_menu, menu);
+      item = menu.findItem(R.id.action_favorite);
+    } else
+      super.onCreateOptionsMenu(menu, inflater);
   }
 
   /**
